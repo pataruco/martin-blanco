@@ -6,6 +6,6 @@
   "author": "Pedro Martin <pataruco@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "terraform:init:": "sh ./terraform-init.sh"
+    "terraform:init": "sh ./terraform-init.sh"
   }
 }
