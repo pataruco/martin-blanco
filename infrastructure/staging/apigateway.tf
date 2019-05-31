@@ -1,6 +1,8 @@
 resource "aws_api_gateway_rest_api" "martin_blanco" {
-  name        = "Serverlessmartin_blanco"
-  description = "Terraform Serverless Application martin_blanco"
+  name        = "martin_blanco_api"
+  description = "Marin Blanco API"
+
+  body = "${file("openapi.yml")}"
 }
 
 resource "aws_api_gateway_resource" "proxy" {

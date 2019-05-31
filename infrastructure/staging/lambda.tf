@@ -3,7 +3,7 @@ resource "aws_lambda_function" "dates" {
 
   # The bucket name as created earlier with "aws s3api create-bucket"
   s3_bucket = "peter-of-the-day-staging"
-  s3_key    = "v1.0.0/dates.zip"
+  s3_key    = "v1.0.0/martin-blanco-api.zip"
 
   # "main" is the filename within the zip file (main.js) and "handler"
   # is the name of the property under which the handler function was
@@ -20,7 +20,7 @@ resource "aws_lambda_function" "date" {
 
   # The bucket name as created earlier with "aws s3api create-bucket"
   s3_bucket = "peter-of-the-day-staging"
-  s3_key    = "v1.0.0/date.zip"
+  s3_key    = "v1.0.0/martin-blanco-api.zip"
 
   # "main" is the filename within the zip file (main.js) and "handler"
   # is the name of the property under which the handler function was
