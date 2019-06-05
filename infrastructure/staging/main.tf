@@ -1,5 +1,6 @@
 provider "aws" {
   version = "~> 2.12"
+  region  = "eu-central-1"
 }
 
 terraform {
@@ -8,3 +9,7 @@ terraform {
     key    = "terraform"
   }
 }
+
+data "aws_region" "current" {}
+
+data "aws_caller_identity" "current" {}

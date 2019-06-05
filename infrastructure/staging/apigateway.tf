@@ -1,58 +1,39 @@
 resource "aws_api_gateway_rest_api" "martin_blanco" {
-  name        = "martin_blanco_api"
-  description = "Marin Blanco API"
-
-  body = "${file("openapi.yml")}"
+  name        = "Martin Blanco API"
+  description = "Martin Blanco API"
 }
 
-resource "aws_api_gateway_resource" "proxy" {
+resource "aws_api_gateway_resource" "dates_resource" {
   rest_api_id = "${aws_api_gateway_rest_api.martin_blanco.id}"
   parent_id   = "${aws_api_gateway_rest_api.martin_blanco.root_resource_id}"
-  path_part   = "{proxy+}"
+  path_part   = "dates"
 }
 
-resource "aws_api_gateway_method" "proxy" {
+resource "aws_api_gateway_method" "dates_method" {
   rest_api_id   = "${aws_api_gateway_rest_api.martin_blanco.id}"
-  resource_id   = "${aws_api_gateway_resource.proxy.id}"
-  http_method   = "ANY"
+  resource_id   = "${aws_api_gateway_resource.dates_resource.id}"
+  http_method   = "GET"
   authorization = "NONE"
 }
 
-resource "aws_api_gateway_integration" "lambda" {
-  rest_api_id = "${aws_api_gateway_rest_api.martin_blanco.id}"
-  resource_id = "${aws_api_gateway_method.proxy.resource_id}"
-  http_method = "${aws_api_gateway_method.proxy.http_method}"
-
+resource "aws_api_gateway_integration" "dates_lambda" {
+  rest_api_id             = "${aws_api_gateway_rest_api.martin_blanco.id}"
+  resource_id             = "${aws_api_gateway_resource.dates_resource.id}"
+  http_method             = "${aws_api_gateway_method.dates_method.http_method}"
   integration_http_method = "POST"
   type                    = "AWS_PROXY"
-  uri                     = "${aws_lambda_function.dates.invoke_arn}"
+
+  uri = "${aws_lambda_function.dates.invoke_arn}"
 }
 
-resource "aws_api_gateway_method" "proxy_root" {
-  rest_api_id   = "${aws_api_gateway_rest_api.martin_blanco.id}"
-  resource_id   = "${aws_api_gateway_rest_api.martin_blanco.root_resource_id}"
-  http_method   = "ANY"
-  authorization = "NONE"
-}
-
-resource "aws_api_gateway_integration" "lambda_root" {
-  rest_api_id = "${aws_api_gateway_rest_api.martin_blanco.id}"
-  resource_id = "${aws_api_gateway_method.proxy_root.resource_id}"
-  http_method = "${aws_api_gateway_method.proxy_root.http_method}"
-
-  integration_http_method = "POST"
-  type                    = "AWS_PROXY"
-  uri                     = "${aws_lambda_function.dates.invoke_arn}"
-}
-
-resource "aws_api_gateway_deployment" "martin_blanco" {
+resource "aws_api_gateway_deployment" "dates_deployment" {
   depends_on = [
-    "aws_api_gateway_integration.lambda",
-    "aws_api_gateway_integration.lambda_root",
+    "aws_api_gateway_method.dates_method",
+    "aws_api_gateway_integration.dates_lambda",
   ]
 
   rest_api_id = "${aws_api_gateway_rest_api.martin_blanco.id}"
-  stage_name  = "dates"
+  stage_name  = "staging"
 }
 
 resource "aws_lambda_permission" "apigw" {
@@ -63,9 +44,5 @@ resource "aws_lambda_permission" "apigw" {
 
   # The /*/* portion grants access from any method on any resource
   # within the API Gateway "REST API".
-  source_arn = "${aws_api_gateway_deployment.martin_blanco.execution_arn}/*/*"
-}
-
-output "base_url" {
-  value = "${aws_api_gateway_deployment.martin_blanco.invoke_url}"
+  source_arn = "${replace(aws_api_gateway_deployment.dates_deployment.execution_arn, aws_api_gateway_deployment.dates_deployment.stage_name, "")}*/*"
 }
