@@ -1,22 +1,29 @@
-const dateregex = /^\d{4}-\d{2}-\d{2}$/;
-
 const { getDate } = require('./lib');
+
+const Joi = require('@hapi/joi');
+
+const schema = Joi.object().keys({
+  dateId: Joi.date(),
+});
 
 exports.handler = async event => {
   const dateId = event.pathParameters.dateId;
   const date = await getDate(dateId);
-  const isDateString = dateregex.test(dateId);
 
-  if (isDateString && date.length > 0) {
+  const { error } = Joi.validate(event.pathParameters, schema);
+
+  if (error) {
     return {
       isBase64Encoded: false,
-      statusCode: 200,
+      statusCode: 400,
       headers: {},
-      body: JSON.stringify(...date),
+      body: JSON.stringify({
+        message: 'date format should be ISO',
+      }),
     };
   }
 
-  if (isDateString && date.length === 0) {
+  if (date.length === 0) {
     return {
       isBase64Encoded: false,
       statusCode: 204,
@@ -27,14 +34,10 @@ exports.handler = async event => {
     };
   }
 
-  if (!isDateString) {
-    return {
-      isBase64Encoded: false,
-      statusCode: 400,
-      headers: {},
-      body: JSON.stringify({
-        message: 'date format should be ISO',
-      }),
-    };
-  }
+  return {
+    isBase64Encoded: false,
+    statusCode: 200,
+    headers: {},
+    body: JSON.stringify(...date),
+  };
 };

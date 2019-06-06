@@ -9,6 +9,7 @@
     "source": "sh ./source.sh"
   },
   "dependencies": {
+    "@hapi/joi": "^15.0.3",
     "aws-sdk": "^2.469.0"
   }
 }
