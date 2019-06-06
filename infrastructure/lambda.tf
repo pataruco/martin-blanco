@@ -28,6 +28,7 @@ resource "aws_lambda_function" "date" {
   runtime          = "nodejs10.x"
   source_code_hash = "${base64sha256(file("${data.archive_file.lambdas_zip.output_path}"))}"
   publish          = true
+  timeout          = 10
 
   environment {
     variables = {
