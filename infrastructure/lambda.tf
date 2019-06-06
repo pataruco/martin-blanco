@@ -28,6 +28,12 @@ resource "aws_lambda_function" "date" {
   runtime          = "nodejs10.x"
   source_code_hash = "${base64sha256(file("${data.archive_file.lambdas_zip.output_path}"))}"
   publish          = true
+
+  environment {
+    variables = {
+      POD_BUCKET_NAME = "${var.POD_BUCKET_NAME}"
+    }
+  }
 }
 
 resource "aws_iam_role" "lambda_exec" {

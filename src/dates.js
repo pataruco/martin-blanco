@@ -1,7 +1,7 @@
-const { getMAnifest } = require('./lib');
+const { getManifest } = require('./lib');
 
 exports.handler = async () => {
-  const manifest = await getMAnifest();
+  const manifest = await getManifest();
   const dates = manifest.dates;
   return {
     isBase64Encoded: false,

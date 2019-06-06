@@ -6,7 +6,7 @@ const params = {
   Key: 'manifest.json',
 };
 
-const getMAnifest = async () => {
+const getManifest = async () => {
   try {
     const data = await s3.getObject(params).promise();
     return JSON.parse(data.Body.toString('utf-8'));
@@ -15,4 +15,9 @@ const getMAnifest = async () => {
   }
 };
 
-module.exports = { getMAnifest };
+const getDate = async dateId => {
+  const manifest = await getManifest();
+  return manifest.dates.filter(date => date.date === dateId);
+};
+
+module.exports = { getManifest, getDate };
