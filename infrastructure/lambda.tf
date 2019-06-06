@@ -15,7 +15,7 @@ resource "aws_lambda_function" "dates" {
 
   environment {
     variables = {
-      POD_BUCKET_NAME = "peter-of-the-day"
+      POD_BUCKET_NAME = "${var.POD_BUCKET_NAME}"
     }
   }
 }

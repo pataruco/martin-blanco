@@ -2,3 +2,4 @@ node_modules
 .terraform
 .env
 *.zip
+terraform.tfvars
