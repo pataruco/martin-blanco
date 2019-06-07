@@ -11,3 +11,7 @@ terraform {
 }
 
 variable "POD_BUCKET_NAME" {}
+
+variable "node_version" {
+  default = "nodejs10.x"
+}
