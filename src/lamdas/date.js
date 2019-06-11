@@ -2,7 +2,9 @@ const Joi = require('@hapi/joi');
 const { dateRegex, getDate } = require('./lib');
 
 const schema = Joi.object().keys({
-  dateId: Joi.string().regex(dateRegex),
+  dateId: Joi.string()
+    .regex(dateRegex)
+    .required(),
 });
 
 exports.handler = async event => {
