@@ -1,8 +1,5 @@
-const { getDate } = require('./lib');
-
 const Joi = require('@hapi/joi');
-
-const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
+const { dateRegex, getDate } = require('./lib');
 
 const schema = Joi.object().keys({
   dateId: Joi.string().regex(dateRegex),
