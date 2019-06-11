@@ -58,6 +58,18 @@
   dependencies:
     any-observable "^0.3.0"
 
+"@types/aws-lambda@^8.10.27":
+  version "8.10.27"
+  resolved "https://registry.yarnpkg.com/@types/aws-lambda/-/aws-lambda-8.10.27.tgz#33366bb26d8fb116f414e7c1855df5a0b6aa1d3d"
+  integrity sha512-9QjcjORRtgG5KPVHWqGZ0F2Uo/ALUWQ5D7qfJEco0fEjoSbA908w05RXql7YPS72jQ1w6I+pr+8pQPqBPlYnSw==
+
+"@types/hapi__joi@*", "@types/hapi__joi@^15.0.1":
+  version "15.0.1"
+  resolved "https://registry.yarnpkg.com/@types/hapi__joi/-/hapi__joi-15.0.1.tgz#6038375074af792b765e34dc799c83d30a406fbe"
+  integrity sha512-uqH3kTO1nrhe+Pbq+dQKrulrfscRPjFZNv9UWA3FupJZBHw+miT7yiV6C8A80YLnn0o6zbgTProncBb3d7QohA==
+  dependencies:
+    "@types/hapi__joi" "*"
+
 "@types/node@^12.0.8":
   version "12.0.8"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-12.0.8.tgz#551466be11b2adc3f3d47156758f610bd9f6b1d8"
