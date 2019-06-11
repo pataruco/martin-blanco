@@ -68,9 +68,16 @@ module "date_id" {
 }
 
 module "file" {
-  source                 = "./routes/date/id/file"
-  date_id_resource_id    = "${module.date_id.date_id_resource_id}"
-  stage_name             = "${var.stage_name}"
-  rest_api_execution_arn = "${aws_api_gateway_rest_api.martin_blanco.execution_arn}"
-  rest_api_id            = "${aws_api_gateway_rest_api.martin_blanco.id}"
+  source                     = "./routes/date/id/file"
+  date_id_resource_id        = "${module.date_id.date_id_resource_id}"
+  stage_name                 = "${var.stage_name}"
+  rest_api_execution_arn     = "${aws_api_gateway_rest_api.martin_blanco.execution_arn}"
+  rest_api_id                = "${aws_api_gateway_rest_api.martin_blanco.id}"
+  date_id_resource_id        = "${module.date_id.date_id_resource_id}"
+  rest_api_execution_arn     = "${aws_api_gateway_rest_api.martin_blanco.execution_arn}"
+  lamda_role                 = "${aws_iam_role.lambda_exec.arn}"
+  POD_BUCKET_NAME            = "${var.POD_BUCKET_NAME}"
+  zip_output_path            = "${data.archive_file.lambdas_zip.output_path}"
+  node_dependecies_layer_arn = "${aws_lambda_layer_version.node_dependencies.arn}"
+  node_version               = "${var.node_version}"
 }
