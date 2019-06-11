@@ -93,3 +93,15 @@ module "random" {
   stage_name             = "${var.stage_name}"
   zip_output_path        = "${data.archive_file.lambdas_zip.output_path}"
 }
+
+module "updated" {
+  lamda_role             = "${aws_iam_role.lambda_exec.arn}"
+  node_version           = "${var.node_version}"
+  POD_BUCKET_NAME        = "${var.POD_BUCKET_NAME}"
+  rest_api_execution_arn = "${aws_api_gateway_rest_api.martin_blanco.execution_arn}"
+  rest_api_id            = "${aws_api_gateway_rest_api.martin_blanco.id}"
+  root_id                = "${aws_api_gateway_rest_api.martin_blanco.root_resource_id}"
+  source                 = "./routes/updated"
+  stage_name             = "${var.stage_name}"
+  zip_output_path        = "${data.archive_file.lambdas_zip.output_path}"
+}
