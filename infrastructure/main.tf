@@ -53,3 +53,12 @@ module "date" {
   rest_api_id = "${aws_api_gateway_rest_api.martin_blanco.id}"
   root_id     = "${aws_api_gateway_rest_api.martin_blanco.root_resource_id}"
 }
+
+module "date_id" {
+  source                     = "./routes/date/id"
+  lamda_role                 = "${aws_iam_role.lambda_exec.arn}"
+  node_version               = "${var.node_version}"
+  POD_BUCKET_NAME            = "${var.POD_BUCKET_NAME}"
+  zip_output_path            = "${data.archive_file.lambdas_zip.output_path}"
+  node_dependecies_layer_arn = "${aws_lambda_layer_version.node_dependencies.arn}"
+}
