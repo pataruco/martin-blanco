@@ -6,3 +6,7 @@ resource "aws_api_gateway_resource" "date_resource" {
   parent_id   = "${var.root_id}"
   path_part   = "date"
 }
+
+output "date_resource_id" {
+  value = "${aws_api_gateway_resource.date_resource.id}"
+}
