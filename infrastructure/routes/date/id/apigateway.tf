@@ -6,7 +6,7 @@ variable rest_api_execution_arn {}
 resource "aws_api_gateway_resource" "date_id_resource" {
   rest_api_id = "${var.rest_api_id}"
   parent_id   = "${var.date_resource_id}"
-  path_part   = "date"
+  path_part   = "{dateId}"
 }
 
 resource "aws_api_gateway_method" "date_id_method" {
@@ -14,6 +14,10 @@ resource "aws_api_gateway_method" "date_id_method" {
   resource_id   = "${aws_api_gateway_resource.date_id_resource.id}"
   http_method   = "GET"
   authorization = "NONE"
+
+  request_parameters = {
+    "method.request.path.dateId" = true
+  }
 }
 
 resource "aws_api_gateway_integration" "date_lamda" {
