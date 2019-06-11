@@ -2,8 +2,10 @@ const { getDate } = require('./lib');
 
 const Joi = require('@hapi/joi');
 
+const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
+
 const schema = Joi.object().keys({
-  dateId: Joi.date(),
+  dateId: Joi.string().regex(dateRegex),
 });
 
 exports.handler = async event => {
@@ -18,7 +20,7 @@ exports.handler = async event => {
       statusCode: 400,
       headers: {},
       body: JSON.stringify({
-        message: 'date format should be ISO',
+        message: error.details.map(x => x.message).join(', '),
       }),
     };
   }
