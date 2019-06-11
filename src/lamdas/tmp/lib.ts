@@ -89,4 +89,4 @@ const getDate = async (dateId: string): Promise<Date[] | undefined> => {
   }
 };
 
-module.exports = { dateRegex, getManifest, getDate, getPicture, getFile };
+export { dateRegex, getManifest, getDate, getPicture, getFile };
