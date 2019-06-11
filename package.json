@@ -1,15 +1,54 @@
 {
   "name": "martin-blanco",
   "version": "1.0.0",
-  "main": "index.js",
+  "engines": {
+    "node": ">=v12.3.0"
+  },
   "repository": "git@github.com:pataruco/martin-blanco.git",
   "author": "Pedro Martin <pataruco@gmail.com>",
   "license": "MIT",
   "scripts": {
+    "lint": "yarn tslint",
     "source": "sh ./source.sh"
   },
   "dependencies": {
     "@hapi/joi": "^15.0.3",
-    "aws-sdk": "^2.469.0"
+    "aws-sdk": "^2.469.0",
+    "typescript": "^3.5.1"
+  },
+  "devDependencies": {
+    "eslint": "^5.16.0",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-config-prettier": "^4.3.0",
+    "eslint-plugin-import": "^2.17.3",
+    "eslint-plugin-prettier": "^3.1.0",
+    "husky": "^2.4.0",
+    "lint-staged": "^8.2.0",
+    "prettier": "^1.18.2",
+    "tslint": "^5.17.0",
+    "tslint-config-prettier": "^1.18.0",
+    "tslint-eslint-rules": "^5.4.0",
+    "tslint-plugin-prettier": "^2.0.1"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "linters": {
+      "*.{js,json,yml,md}": [
+        "./node_modules/.bin/prettier --write"
+      ],
+      "*.js": [
+        "./node_modules/.bin/eslint --fix"
+      ],
+      "*.{ts,ts}": [
+        "yarn lint"
+      ],
+      "*.tf": [
+        "bash -c 'terraform fmt -check'"
+      ]
+    }
   }
 }
