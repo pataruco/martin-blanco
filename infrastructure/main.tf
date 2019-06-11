@@ -1,6 +1,6 @@
 provider "aws" {
-  version = "~> 2.12"
   region  = "eu-central-1"
+  version = "~> 2.12"
 }
 
 terraform {
@@ -21,19 +21,19 @@ variable "stage_name" {
 }
 
 resource "aws_api_gateway_rest_api" "martin_blanco" {
-  name        = "Martin Blanco API"
   description = "Martin Blanco API"
+  name        = "Martin Blanco API"
 }
 
 data "archive_file" "lambdas_zip" {
-  type        = "zip"
-  source_dir  = "../src/lamdas"
   output_path = "lambda.zip"
+  source_dir  = "../src/lamdas"
+  type        = "zip"
 }
 
 resource "aws_iam_role" "lambda_exec" {
-  name               = "lamda_execution_role"
   assume_role_policy = "${file("policies/lambda-role.json")}"
+  name               = "lamda_execution_role"
 }
 
 module "dates" {
