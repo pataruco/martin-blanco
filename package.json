@@ -7,10 +7,6 @@
   "repository": "git@github.com:pataruco/martin-blanco.git",
   "author": "Pedro Martin <pataruco@gmail.com>",
   "license": "MIT",
-  "scripts": {
-    "lint": "yarn tslint",
-    "source": "sh ./source.sh"
-  },
   "dependencies": {
     "@hapi/joi": "^15.0.3",
     "aws-sdk": "^2.469.0",
@@ -51,5 +47,11 @@
         "bash -c 'terraform fmt -check'"
       ]
     }
+  },
+  "scripts": {
+    "lint": "yarn tslint",
+    "source": "sh ./source.sh",
+    "compile": "yarn tsc --build",
+    "deploy": "yarn compile && terraform apply"
   }
 }
