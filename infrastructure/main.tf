@@ -66,3 +66,11 @@ module "date_id" {
   rest_api_execution_arn     = "${aws_api_gateway_rest_api.martin_blanco.execution_arn}"
   rest_api_id                = "${aws_api_gateway_rest_api.martin_blanco.id}"
 }
+
+module "file" {
+  source                 = "./routes/date/id/file"
+  date_id_resource_id    = "${module.date_id.date_id_resource_id}"
+  stage_name             = "${var.stage_name}"
+  rest_api_execution_arn = "${aws_api_gateway_rest_api.martin_blanco.execution_arn}"
+  rest_api_id            = "${aws_api_gateway_rest_api.martin_blanco.id}"
+}
