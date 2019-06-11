@@ -5,7 +5,7 @@ provider "aws" {
 
 terraform {
   backend "s3" {
-    bucket = "peter-of-the-day-staging"
+    bucket = "martin-blanco"
     key    = "terraform"
   }
 }
