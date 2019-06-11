@@ -37,47 +37,59 @@ resource "aws_iam_role" "lambda_exec" {
 }
 
 module "dates" {
-  source                 = "./routes/dates"
-  rest_api_id            = "${aws_api_gateway_rest_api.martin_blanco.id}"
-  root_id                = "${aws_api_gateway_rest_api.martin_blanco.root_resource_id}"
-  stage_name             = "${var.stage_name}"
   lamda_role             = "${aws_iam_role.lambda_exec.arn}"
   node_version           = "${var.node_version}"
   POD_BUCKET_NAME        = "${var.POD_BUCKET_NAME}"
-  zip_output_path        = "${data.archive_file.lambdas_zip.output_path}"
   rest_api_execution_arn = "${aws_api_gateway_rest_api.martin_blanco.execution_arn}"
+  rest_api_id            = "${aws_api_gateway_rest_api.martin_blanco.id}"
+  root_id                = "${aws_api_gateway_rest_api.martin_blanco.root_resource_id}"
+  source                 = "./routes/dates"
+  stage_name             = "${var.stage_name}"
+  zip_output_path        = "${data.archive_file.lambdas_zip.output_path}"
 }
 
 module "date" {
-  source      = "./routes/date"
   rest_api_id = "${aws_api_gateway_rest_api.martin_blanco.id}"
   root_id     = "${aws_api_gateway_rest_api.martin_blanco.root_resource_id}"
+  source      = "./routes/date"
 }
 
 module "date_id" {
-  source                     = "./routes/date/id"
+  date_resource_id           = "${module.date.date_resource_id}"
   lamda_role                 = "${aws_iam_role.lambda_exec.arn}"
+  node_dependecies_layer_arn = "${aws_lambda_layer_version.node_dependencies.arn}"
   node_version               = "${var.node_version}"
   POD_BUCKET_NAME            = "${var.POD_BUCKET_NAME}"
-  zip_output_path            = "${data.archive_file.lambdas_zip.output_path}"
-  node_dependecies_layer_arn = "${aws_lambda_layer_version.node_dependencies.arn}"
-  date_resource_id           = "${module.date.date_resource_id}"
-  stage_name                 = "${var.stage_name}"
   rest_api_execution_arn     = "${aws_api_gateway_rest_api.martin_blanco.execution_arn}"
   rest_api_id                = "${aws_api_gateway_rest_api.martin_blanco.id}"
+  source                     = "./routes/date/id"
+  stage_name                 = "${var.stage_name}"
+  zip_output_path            = "${data.archive_file.lambdas_zip.output_path}"
 }
 
 module "file" {
-  source                     = "./routes/date/id/file"
   date_id_resource_id        = "${module.date_id.date_id_resource_id}"
-  stage_name                 = "${var.stage_name}"
-  rest_api_execution_arn     = "${aws_api_gateway_rest_api.martin_blanco.execution_arn}"
-  rest_api_id                = "${aws_api_gateway_rest_api.martin_blanco.id}"
   date_id_resource_id        = "${module.date_id.date_id_resource_id}"
-  rest_api_execution_arn     = "${aws_api_gateway_rest_api.martin_blanco.execution_arn}"
   lamda_role                 = "${aws_iam_role.lambda_exec.arn}"
-  POD_BUCKET_NAME            = "${var.POD_BUCKET_NAME}"
-  zip_output_path            = "${data.archive_file.lambdas_zip.output_path}"
   node_dependecies_layer_arn = "${aws_lambda_layer_version.node_dependencies.arn}"
   node_version               = "${var.node_version}"
+  POD_BUCKET_NAME            = "${var.POD_BUCKET_NAME}"
+  rest_api_execution_arn     = "${aws_api_gateway_rest_api.martin_blanco.execution_arn}"
+  rest_api_execution_arn     = "${aws_api_gateway_rest_api.martin_blanco.execution_arn}"
+  rest_api_id                = "${aws_api_gateway_rest_api.martin_blanco.id}"
+  source                     = "./routes/date/id/file"
+  stage_name                 = "${var.stage_name}"
+  zip_output_path            = "${data.archive_file.lambdas_zip.output_path}"
+}
+
+module "random" {
+  lamda_role             = "${aws_iam_role.lambda_exec.arn}"
+  node_version           = "${var.node_version}"
+  POD_BUCKET_NAME        = "${var.POD_BUCKET_NAME}"
+  rest_api_execution_arn = "${aws_api_gateway_rest_api.martin_blanco.execution_arn}"
+  rest_api_id            = "${aws_api_gateway_rest_api.martin_blanco.id}"
+  root_id                = "${aws_api_gateway_rest_api.martin_blanco.root_resource_id}"
+  source                 = "./routes/random"
+  stage_name             = "${var.stage_name}"
+  zip_output_path        = "${data.archive_file.lambdas_zip.output_path}"
 }
