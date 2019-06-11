@@ -46,3 +46,7 @@ resource "aws_lambda_permission" "apigw" {
   principal     = "apigateway.amazonaws.com"
   source_arn    = "${var.rest_api_execution_arn}/*/*/*"
 }
+
+output "date_id_resource_id" {
+  value = "${aws_api_gateway_resource.date_id_resource.id}"
+}
