@@ -27,7 +27,7 @@ resource "aws_api_gateway_rest_api" "martin_blanco" {
 
 data "archive_file" "lambdas_zip" {
   output_path = "lambda.zip"
-  source_dir  = "../src/lamdas"
+  source_dir  = "../dist"
   type        = "zip"
 }
 
