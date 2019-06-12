@@ -39,10 +39,13 @@ const getManifest = async (): Promise<Manifest | null> => {
   return null;
 };
 
-const getFile = (date: Date[], fileId: string): string | FileMessage => {
+const getFile = (
+  date: Date[] | undefined,
+  fileId: string,
+): FileMessage | File['url'] => {
   const index = Number(fileId) - 1;
 
-  if (date.length > 0) {
+  if (date && date.length > 0) {
     const isFileAvailable = index + 1 <= date[0].files.length;
 
     if (!isFileAvailable) {
@@ -62,24 +65,17 @@ const getFile = (date: Date[], fileId: string): string | FileMessage => {
   };
 };
 
-const getPicture = async (fileName: string): Promise<string | null> => {
+const getPicture = async (fileName: string): Promise<string> => {
   const pictureParams = {
     Bucket: `${POD_BUCKET_NAME}`,
     Key: fileName,
   };
 
-  try {
-    const data = await s3.getObject(pictureParams).promise();
-    if (data && data.Body) {
-      return data.Body.toString('base64');
-    }
-  } catch (error) {
-    // tslint:disable-next-line:no-console
-    console.error(error);
-    return null;
+  const data = await s3.getObject(pictureParams).promise();
+  if (data && data.Body) {
+    return data.Body.toString('base64');
   }
-
-  return null;
+  return '';
 };
 
 const getDate = async (dateId: string): Promise<Date[] | undefined> => {
