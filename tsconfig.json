@@ -57,6 +57,6 @@
     // "experimentalDecorators": true,        /* Enables experimental support for ES7 decorators. */
     // "emitDecoratorMetadata": true,         /* Enables experimental support for emitting type metadata for decorators. */
   },
-  "include": ["src/lamdas/**/*"],
-  "exclude": ["node_modules"]
+  "include": ["src/lamdas/*.ts"],
+  "exclude": ["node_modules", "src/lamdas/tests"]
 }
