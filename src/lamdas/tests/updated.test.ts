@@ -4,10 +4,14 @@ import manifest from './manifest';
 
 describe(updated, () => {
   it('return an updated date', async () => {
+    const getManifestSpy = jest
+      .spyOn(lib, 'getManifest')
+      .mockResolvedValue(manifest);
+
     const response = await updated();
+    const updateDate = manifest.updated;
 
-    const updateDate = '2019-01-20T15:11:02.616+00:00';
-
+    expect(getManifestSpy).toBeCalled();
     expect(response).toEqual({
       statusCode: 200,
       headers: {},
