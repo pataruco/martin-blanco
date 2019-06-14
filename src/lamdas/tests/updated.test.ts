@@ -1,4 +1,6 @@
+import * as lib from '../lib';
 import { handler as updated } from '../updated';
+import manifest from './manifest';
 
 describe(updated, () => {
   it('return an updated date', async () => {
