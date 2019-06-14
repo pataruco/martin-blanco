@@ -1,8 +1,5 @@
 import { APIGatewayProxyResult } from 'aws-lambda';
-import { getManifest, getPicture } from './lib';
-
-const getRandomNumber = (maxNumber: number): number =>
-  Math.floor(Math.random() * maxNumber) + 1;
+import { getManifest, getPicture, getRandomNumber } from './lib';
 
 export const handler = async (): Promise<APIGatewayProxyResult> => {
   const manifest = await getManifest();
@@ -27,7 +24,7 @@ export const handler = async (): Promise<APIGatewayProxyResult> => {
   }
 
   return {
-    isBase64Encoded: true,
+    isBase64Encoded: false,
     statusCode: 400,
     headers: {},
     body: JSON.stringify({

@@ -25,6 +25,9 @@ interface FileMessage {
   message: string;
 }
 
+export const getRandomNumber = (maxNumber: number): number =>
+  Math.floor(Math.random() * maxNumber) + 1;
+
 const getManifest = async (): Promise<Manifest | null> => {
   try {
     const data = await s3.getObject(params).promise();
