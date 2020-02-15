@@ -1,4 +1,5 @@
-import { Request, Response, NextFunction } from 'express';
+/* eslint-disable no-unused-vars */
+import express, { Request, Response, NextFunction } from 'express';
 import errorHandlerMiddleware from './middleware/error-handler';
 import httpLoggerMiddleware from './middleware/http-logger';
 import logger from './utils/logger';

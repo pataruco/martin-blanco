@@ -33,7 +33,7 @@
     "*.{js,json,yml,md}": [
       "yarn prettier --write"
     ],
-    "*.{ts}": [
+    "*.ts": [
       "eslint --fix",
       "prettier --write"
     ],
