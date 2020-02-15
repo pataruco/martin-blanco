@@ -1,0 +1,17 @@
+name: Pipeline
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node: ['10']
+    name: Installing node
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup node
+        uses: actions/setup-node@v1
+        with:
+          node-version: 10.16.2
+      - run: yarn install
