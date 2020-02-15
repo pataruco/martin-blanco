@@ -41,5 +41,8 @@
   },
   "name": "martin-blanco",
   "repository": "git@github.com:pataruco/martin-blanco.git",
+  "scripts": {
+    "build": "yarn tsc --build"
+  },
   "version": "1.0.0"
 }
