@@ -1,11 +1,13 @@
+// eslint-disable-next-line no-unused-vars
 import { Request, Response, NextFunction } from 'express';
 import logger from '../utils/logger';
 
 const errorHandlerMiddleware = async (
   error: Error,
-  req: Request,
+  _req: Request,
   res: Response,
-  next: NextFunction,
+  // eslint-disable-next-line no-unused-vars
+  _next: NextFunction,
 ) => {
   const { message: errorMessage } = error;
   logger.error(errorMessage);
