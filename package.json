@@ -20,9 +20,6 @@
     "ts-node": "^8.6.2",
     "typescript": "^3.7.5"
   },
-  "engines": {
-    "node": "v10.16.2"
-  },
   "husky": {
     "hooks": {
       "pre-commit": "lint-staged"
@@ -39,10 +36,12 @@
     ],
     "*.tf": "bash -c 'terraform fmt -check'"
   },
-  "name": "martin-blanco",
+  "name": "martin-blanco-api",
+  "main": "dist/index.js",
   "repository": "git@github.com:pataruco/martin-blanco.git",
   "scripts": {
-    "build": "yarn tsc --build"
+    "build": "bash ./scripts/compile.sh",
+    "deploy:dev": "bash ./scripts/deploy.sh"
   },
   "version": "1.0.0"
 }
