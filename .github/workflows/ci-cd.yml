@@ -14,17 +14,33 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: 10.16.2
-      - run: yarn install
+      - run: yarn && yarn build
+        shell: bash
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v1
+        with:
+          name: api
+          path: ./dist/
   loginInGCP:
     runs-on: ubuntu-latest
     name: Logging into GCP
+    needs:
+      - build
     steps:
       - uses: actions/checkout@v2
+      - uses: actions/download-artifact@v1
+        name: Download Artifact
+        with:
+          name: api
       - uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
         with:
           service_account_email: ${{ secrets.GCP_SA_EMAIL }}
           service_account_key: ${{ secrets.GCP_SA_KEY }}
-      - run: gcloud info
+      - run: |
+          ls -lah
+          ls -lah ./api
+          yarn deploy:dev
+        shell: bash
       # main.workflow
 # workflow "Deploy to cloud function" {
 #   on = "push"
