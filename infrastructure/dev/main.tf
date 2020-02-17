@@ -16,11 +16,13 @@ locals {
   dist_path    = "${path.root}/../../dist/"
   project      = "martin-blanco-api-dev"
   zip_filename = "api.zip"
+  bucket_name  = "martin-blanco"
 }
 
 module "cloud-function" {
-  source       = "../modules/cloud-function"
+  bucket_name  = local.bucket_name
   dist_path    = local.dist_path
   project      = local.project
+  source       = "../modules/cloud-function"
   zip_filename = local.zip_filename
 }
