@@ -10,7 +10,7 @@ data "archive_file" "api_zip" {
 resource "google_storage_bucket" "martin_blanco_bucket" {
   force_destroy = true
   location      = "europe-west2"
-  name          = "martin-blanco"
+  name          = var.bucket_name
   project       = var.project
   versioning {
     enabled = true
@@ -39,11 +39,6 @@ resource "google_cloudfunctions_function" "api" {
   source_archive_object = google_storage_bucket_object.api_zip.name
   trigger_http          = true
 }
-
-output "https_trigger_url" {
-  value = google_cloudfunctions_function.api.https_trigger_url
-}
-
 
 
 # IAM entry for all users to invoke the function

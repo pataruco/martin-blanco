@@ -9,3 +9,7 @@ variable "project" {
 variable "zip_filename" {
   description = "Zip file name for cloud function to fetch source"
 }
+
+variable "bucket_name" {
+  description = "Storage bucket name"
+}
