@@ -14,3 +14,4 @@
 - [ ] Workout roots
 - [ ] Create an upload endpoint
 - [ ] Create URLs for development and production
+- [ ] Enable winston to log to StackDriver
