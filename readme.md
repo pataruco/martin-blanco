@@ -6,9 +6,9 @@
 
 ## To do
 
-- [ ] Create terraform models for cloud functions
-- [ ] Create production environment
-- [ ] Deploy production when release tag is created GitHub action
+- [x] Create terraform models for cloud functions
+- [x] Create production environment
+- [x] Deploy production when release tag is created GitHub action
 - [ ] Create swagger file
 - [ ] Render swagger file en root
 - [ ] Move files to develop environment
