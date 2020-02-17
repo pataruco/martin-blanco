@@ -41,7 +41,8 @@
   "repository": "git@github.com:pataruco/martin-blanco.git",
   "scripts": {
     "build": "bash ./scripts/compile.sh",
-    "deploy:dev": "bash ./scripts/deploy.sh"
+    "deploy:dev": "bash CLOUD_PROJECT=martin-blanco-api-dev ./scripts/deploy.sh",
+    "deploy:prod": "bash CLOUD_PROJECT=martin-blanco-api-prod ./scripts/deploy.sh"
   },
   "version": "1.0.0"
 }
