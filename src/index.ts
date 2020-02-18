@@ -3,6 +3,8 @@ import express, { Request, Response, NextFunction } from 'express';
 import errorHandlerMiddleware from './middleware/error-handler';
 import httpLoggerMiddleware from './middleware/http-logger';
 import logger from './utils/logger';
+import swaggerUi from 'swagger-ui-express';
+import swaggerDocument from './routes/root/swagger.json';
 
 export const PORT = process.env.PORT || '8080';
 export const HOST = process.env.HOST || '0.0.0.0';
@@ -21,3 +23,5 @@ if (!module.parent) {
     logger.info(`server.listening ${JSON.stringify({ HOST, PORT })}`),
   );
 }
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
