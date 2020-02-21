@@ -44,7 +44,9 @@
   "scripts": {
     "build": "bash ./scripts/compile.sh",
     "deploy:dev": "bash ./scripts/deploy-dev.sh",
-    "deploy:prod": "bash ./scripts/deploy-prod.sh"
+    "deploy:prod": "bash ./scripts/deploy-prod.sh",
+    "dev": "yarn ts-node ./src/index.ts",
+    "importer": "yarn ts-node ./src/importer/index.ts"
   },
   "version": "1.0.0"
 }
