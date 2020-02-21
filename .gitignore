@@ -4,3 +4,7 @@ node_modules
 yarn-error.log
 dist/*
 !dist/.gitkeep
+src/importer/input/*
+!src/importer/input/.gitkeep
+src/importer/output/*
+!src/importer/output/.gitkeep
