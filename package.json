@@ -1,8 +1,10 @@
 {
   "author": "Pedro Martin <pataruco@gmail.com>",
   "dependencies": {
+    "@google-cloud/storage": "^4.3.1",
     "@types/morgan": "^1.7.37",
     "@types/node": "^13.7.1",
+    "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "morgan": "^1.9.1",
     "swagger-ui-express": "^4.1.3",
