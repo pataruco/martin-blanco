@@ -3,15 +3,10 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-const {
-  PROJECT_ID: projectId,
-  KEY_FILENAME: keyFilename,
-  BUCKET_NAME,
-} = process.env;
+const { PROJECT_ID: projectId, BUCKET_NAME } = process.env;
 
 const storage = new Storage({
   projectId,
-  keyFilename: '/Users/pataruco/creds/martin-blanco-api-dev.json',
 });
 
 export interface Time {
@@ -29,7 +24,7 @@ const getDirectory = (query: Time) => {
     : `pictures/${year}`;
 };
 
-const getFilesByYear = async (query: Time) => {
+export const getFilesByYear = async (query: Time) => {
   const directory = getDirectory(query);
 
   const [allFiles] = await storage.bucket(`${BUCKET_NAME}`).getFiles({
@@ -46,10 +41,3 @@ const getFilesByYear = async (query: Time) => {
       ),
   );
 };
-
-const start = async () => {
-  const files = await getFilesByYear({ year: '2017' });
-  console.log({ files });
-};
-
-start();
