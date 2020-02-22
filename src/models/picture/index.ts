@@ -14,29 +14,34 @@ const storage = new Storage({
   keyFilename: '/Users/pataruco/creds/martin-blanco-api-dev.json',
 });
 
-const bucket = storage.bucket('martin-blanco');
+const getSpiredDate = (): Date => {
+  const date = new Date();
+  date.setDate(date.getDate() + 7);
+  return date;
+};
 
 const getFilesByYear = async (year: string) => {
-  bucket.getFiles(
-    {
-      autoPaginate: false,
-      directory: `pictures/${year}`,
-    },
-    (error, files) => {
-      if (error) {
-        console.error(error);
-        throw Error(`Failing get files from ${year}, Error: ${error}`);
-      }
-      console.log({ files });
-      return files;
-    },
+  const [allFiles] = await storage.bucket(`${BUCKET_NAME}`).getFiles({
+    autoPaginate: false,
+    directory: `pictures/${year}`,
+  });
+
+  return await Promise.all(
+    await allFiles
+      .filter(file => file.name.includes('.'))
+      .map(async file => {
+        const url = await file.getSignedUrl({
+          action: 'read',
+          expires: getSpiredDate(),
+        });
+        return url;
+      }),
   );
 };
 
 const start = async () => {
   const files = await getFilesByYear('2017');
-
-  console.log({ BUCKET_NAME, files });
+  console.log({ files });
 };
 
 start();
