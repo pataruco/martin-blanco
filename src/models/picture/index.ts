@@ -14,33 +14,41 @@ const storage = new Storage({
   keyFilename: '/Users/pataruco/creds/martin-blanco-api-dev.json',
 });
 
-const getSpiredDate = (): Date => {
-  const date = new Date();
-  date.setDate(date.getDate() + 7);
-  return date;
+export interface Time {
+  year: string;
+  month?: string;
+  day?: string;
+}
+
+const getDirectory = (query: Time) => {
+  const { year, month, day } = query;
+  return day
+    ? `pictures/${year}/${month}/${day}`
+    : month
+    ? `pictures/${year}/${month}`
+    : `pictures/${year}`;
 };
 
-const getFilesByYear = async (year: string) => {
+const getFilesByYear = async (query: Time) => {
+  const directory = getDirectory(query);
+
   const [allFiles] = await storage.bucket(`${BUCKET_NAME}`).getFiles({
     autoPaginate: false,
-    directory: `pictures/${year}`,
+    directory,
   });
 
   return await Promise.all(
-    await allFiles
+    allFiles
       .filter(file => file.name.includes('.'))
-      .map(async file => {
-        const url = await file.getSignedUrl({
-          action: 'read',
-          expires: getSpiredDate(),
-        });
-        return url;
-      }),
+      .map(
+        async file =>
+          `https://storage.googleapis.com/${BUCKET_NAME}/${file.name}`,
+      ),
   );
 };
 
 const start = async () => {
-  const files = await getFilesByYear('2017');
+  const files = await getFilesByYear({ year: '2017' });
   console.log({ files });
 };
 
