@@ -1,7 +1,7 @@
 // eslint-disable-next-line no-unused-vars
 import express, { Request, Response } from 'express';
 import Joi from '@hapi/joi';
-import { getFilesByYear } from '../../models/picture';
+import { getFilesBy } from '../../models/picture';
 
 const router = express.Router();
 
@@ -21,14 +21,13 @@ const getPicturesByYear = async (
   const { error } = getPicturesByYearSchema.validate(req.params);
 
   if (error) {
-    // FIXME: status
     return res.status(422).json({
       message: error.details.map(x => x.message).join(', '),
     });
   }
 
   try {
-    const files = await getFilesByYear({ year });
+    const files = await getFilesBy({ year });
     if (files.length > 0) {
       return res.json({
         year,
@@ -40,8 +39,7 @@ const getPicturesByYear = async (
       message: 'Files not found',
     });
   } catch (error) {
-    // FIXME: status
-    return res.status(422).json({
+    return res.status(500).json({
       message: `Error getFilesByYear, Error: ${error}`,
     });
   }
