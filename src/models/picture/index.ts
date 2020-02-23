@@ -24,7 +24,7 @@ const getDirectory = (query: Time) => {
     : `pictures/${year}`;
 };
 
-export const getFilesByYear = async (query: Time) => {
+export const getFilesBy = async (query: Time) => {
   const directory = getDirectory(query);
 
   const [allFiles] = await storage.bucket(`${BUCKET_NAME}`).getFiles({
