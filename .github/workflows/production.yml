@@ -41,3 +41,5 @@ jobs:
       - run: |
           yarn deploy:prod
         shell: bash
+        env:
+          BUCKET_NAME: ${{ secrets.BUCKET_NAME_PROD }}

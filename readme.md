@@ -12,7 +12,7 @@
 - [x] Create swagger file
 - [x] Render swagger file en root
 - [x] Move files to develop environment
-- [ ] Create an util for get files
+- [x] Create an util for get files
 - [ ] Workout roots
 - [ ] Create an upload endpoint
 - [ ] Create URLs for development and production

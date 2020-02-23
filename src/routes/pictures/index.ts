@@ -5,7 +5,6 @@ import { getFilesByYear } from '../../models/picture';
 
 const router = express.Router();
 
-// TODO: Add env variables fro bucket and project ID to CI
 const getPicturesByYearSchema = Joi.object({
   year: Joi.number()
     .integer()
