@@ -39,3 +39,5 @@ jobs:
       - run: |
           yarn deploy:dev
         shell: bash
+        env:
+          BUCKET_NAME: ${{ secrets.BUCKET_NAME }}
