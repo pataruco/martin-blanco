@@ -2,4 +2,7 @@
 set -euo pipefail
 
 # Create Open API HTML
-yarn openapi-generator generate -i ./src/open-api/swagger.json -g html -o ./src/open-api
+yarn redoc-cli bundle ./src/open-api/open-api-schema.json --options.theme.colors.primary.main=black
+
+# Move file to open-api folder
+mv ./redoc-static.html ./src/open-api/index.html

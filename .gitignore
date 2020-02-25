@@ -11,5 +11,4 @@ src/importer/output/*
 !src/importer/output/.gitkeep
 
 # Open API
-src/open-api/.openapi-generator/*
-.openapi-generator-ignore
+redoc-static.html
