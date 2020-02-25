@@ -1,0 +1,313 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "description": "Martin Blanco API",
+    "title": "Martin Blanco API",
+    "version": "1"
+  },
+  "paths": {
+    "/": {
+      "get": {
+        "tags": ["base"],
+        "summary": "description of the API",
+        "responses": {
+          "200": {
+            "description": "description of endpoints",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiDescription"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/dates": {
+      "get": {
+        "tags": ["dates"],
+        "summary": "List all dates available",
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Dates"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/date/{dateId}": {
+      "get": {
+        "tags": ["date"],
+        "summary": "Retrieve an specific date",
+        "parameters": [
+          {
+            "name": "dateId",
+            "in": "path",
+            "description": "The id of the date to retrieve",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Date"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "Date not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Date format should be ISO",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/date/{dateId}/{fileId}": {
+      "get": {
+        "tags": ["date"],
+        "summary": "Retrieve an specific file from a date",
+        "parameters": [
+          {
+            "name": "dateId",
+            "in": "path",
+            "description": "The id of the date to retrieve",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "fileId",
+            "in": "path",
+            "description": "The id of the date to retrieve",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "headers": {
+              "Content-type": {
+                "description": "Type of file",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/File"
+                }
+              },
+              "image/jpeg": {
+                "schema": {
+                  "$ref": "#/components/schemas/File"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "Content not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              },
+              "image/jpeg": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Date should be YYYY-MM-DD",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              },
+              "image/jpeg": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/random": {
+      "get": {
+        "tags": ["random"],
+        "summary": "Retrieve a random file",
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "headers": {
+              "Content-type": {
+                "description": "Type of file",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/File"
+                }
+              },
+              "image/jpeg": {
+                "schema": {
+                  "$ref": "#/components/schemas/File"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "picture not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              },
+              "image/jpeg": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/updated": {
+      "get": {
+        "tags": ["updated"],
+        "summary": "Last update",
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Update"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "servers": [
+    {
+      "url": "https://peteroftheday/"
+    },
+    {
+      "url": "http://peteroftheday/"
+    }
+  ],
+  "components": {
+    "schemas": {
+      "Dates": {
+        "type": "array",
+        "description": "array of dates",
+        "items": {
+          "$ref": "#/components/schemas/Date"
+        }
+      },
+      "Date": {
+        "type": "object",
+        "properties": {
+          "date": {
+            "type": "string",
+            "description": "date"
+          },
+          "files": {
+            "type": "array",
+            "description": "array of files",
+            "items": {
+              "$ref": "#/components/schemas/File"
+            }
+          }
+        }
+      },
+      "File": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string",
+            "description": "url of the picture"
+          }
+        }
+      },
+      "Update": {
+        "type": "object",
+        "description": "date of the last update",
+        "properties": {
+          "update": {
+            "type": "string"
+          }
+        }
+      },
+      "ErrorMessage": {
+        "type": "object",
+        "description": "Error message",
+        "properties": {
+          "message": {
+            "type": "string"
+          }
+        }
+      },
+      "ApiDescription": {
+        "type": "object",
+        "properties": {
+          "description": {
+            "type": "string"
+          },
+          "schema": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}
