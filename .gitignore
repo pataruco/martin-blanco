@@ -2,9 +2,14 @@ node_modules
 .terraform
 .env
 yarn-error.log
+
 dist/*
 !dist/.gitkeep
 src/importer/input/*
 !src/importer/input/.gitkeep
 src/importer/output/*
 !src/importer/output/.gitkeep
+
+# Open API
+src/open-api/.openapi-generator/*
+.openapi-generator-ignore
