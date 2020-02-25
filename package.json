@@ -49,7 +49,8 @@
     "deploy:dev": "bash ./scripts/deploy-dev.sh",
     "deploy:prod": "bash ./scripts/deploy-prod.sh",
     "dev": "yarn ts-node ./src/index.ts",
-    "importer": "yarn ts-node ./src/importer/index.ts"
+    "importer": "yarn ts-node ./src/importer/index.ts",
+    "open-api": "bash ./scripts/open-api-generate.sh"
   },
   "version": "1.0.0"
 }
