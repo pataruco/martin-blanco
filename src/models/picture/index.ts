@@ -1,4 +1,4 @@
-import { Storage } from '@google-cloud/storage';
+import { Storage, File } from '@google-cloud/storage';
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -13,6 +13,10 @@ export interface Time {
   year: string;
   month?: string;
   day?: string;
+}
+
+interface TimeAndId extends Time {
+  id: string;
 }
 
 const getDirectory = (query: Time) => {
@@ -40,4 +44,20 @@ export const getFilesBy = async (query: Time) => {
           `https://storage.googleapis.com/${BUCKET_NAME}/${file.name}`,
       ),
   );
+};
+
+interface TimeAndId extends Time {
+  id: string;
+}
+
+export const getFileById = async (
+  query: TimeAndId,
+): Promise<File | undefined> => {
+  const { year, month, day, id } = query;
+
+  if (year && month && day && id) {
+    return await storage
+      .bucket(`${BUCKET_NAME}`)
+      .file(`pictures/${year}/${month}/${day}/${id}.jpeg`);
+  }
 };
