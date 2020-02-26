@@ -14,7 +14,7 @@ app.use(httpLoggerMiddleware);
 app.use(errorHandlerMiddleware);
 
 // Routes
-app.use('/', router);
+app.use(router);
 
 if (!module.parent) {
   app.listen(PORT, () =>
