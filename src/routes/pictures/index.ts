@@ -1,7 +1,7 @@
 // eslint-disable-next-line no-unused-vars
 import express, { Request, Response } from 'express';
 import Joi from '@hapi/joi';
-import { getFilesBy } from '../../models/picture';
+import { getFilesBy, getFileById } from '../../models/picture';
 
 const router = express.Router();
 
@@ -131,9 +131,50 @@ const getPicturesByDay = async (
   }
 };
 
+const getPictureByIdSchema = getPicturesByDaySchema.keys({
+  id: Joi.number()
+    .integer()
+    .greater(0)
+    .required(),
+});
+
+const getPictureById = async (
+  req: Request,
+  res: Response,
+): Promise<Response> => {
+  const { error } = getPictureByIdSchema.validate(req.params);
+
+  if (error) {
+    return res.status(422).json({
+      message: error.details.map(x => x.message).join(', '),
+    });
+  }
+
+  const { year, month, day, id } = req.params;
+
+  try {
+    const file = await getFileById({ year, month, day, id });
+
+    if (file && (await file.exists())) {
+      const [downdloadedFile] = await file.download();
+      res.set('content-type', 'image/jpeg');
+      return res.send(downdloadedFile);
+    } else {
+      return res.status(404).json({
+        message: 'File not found',
+      });
+    }
+  } catch (error) {
+    return res.status(500).json({
+      message: `Error getPictureById, Error: ${error}`,
+    });
+  }
+};
+
 router.get('/pictures/date/:year', getPicturesByYear);
 router.get('/pictures/date/:year/:month', getPicturesByMonth);
 router.get('/pictures/date/:year/:month/:day', getPicturesByDay);
-// router.get('/pictures/date/:year/:month/:day/:id', getPicturesByDay);
+router.get('/pictures/date/:year/:month/:day/:id', getPictureById);
+// TODO: random picture
 
 export default router;
