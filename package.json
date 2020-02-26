@@ -20,6 +20,7 @@
     "eslint-plugin-prettier": "^3.1.2",
     "husky": "^4.2.3",
     "lint-staged": "^10.0.7",
+    "nodemon": "^2.0.2",
     "prettier": "^1.19.1",
     "redoc-cli": "^0.9.6",
     "ts-node": "^8.6.2",
@@ -48,7 +49,7 @@
     "build": "bash ./scripts/compile.sh",
     "deploy:dev": "bash ./scripts/deploy-dev.sh",
     "deploy:prod": "bash ./scripts/deploy-prod.sh",
-    "dev": "yarn ts-node ./src/index.ts",
+    "dev": "yarn nodemon ./src/index.ts",
     "importer": "yarn ts-node ./src/importer/index.ts",
     "open-api": "bash ./scripts/open-api-generate.sh"
   },
