@@ -1,6 +1,6 @@
 # Martin Blanco API
 
-![CI Prod](https://github.com/pataruco/martin-blanco/workflows/Production%20pipeline/badge.svg?branch=master)
+![CI Prod](https://github.com/pataruco/martin-blanco/workflows/CI%20Prod/badge.svg)
 
 ![CI Dev](https://github.com/pataruco/martin-blanco/workflows/Development%20pipeline/badge.svg)
 
