@@ -1,7 +1,6 @@
 # Martin Blanco API
 
 ![CI Prod](https://github.com/pataruco/martin-blanco/workflows/CI%20Prod/badge.svg)
-
 ![CI Dev](https://github.com/pataruco/martin-blanco/workflows/CI%20Dev/badge.svg)
 
 ## To do
