@@ -46,10 +46,6 @@ export const getFilesBy = async (query: Time) => {
   );
 };
 
-interface TimeAndId extends Time {
-  id: string;
-}
-
 export const getFileById = async (
   query: TimeAndId,
 ): Promise<File | undefined> => {
@@ -60,4 +56,17 @@ export const getFileById = async (
       .bucket(`${BUCKET_NAME}`)
       .file(`pictures/${year}/${month}/${day}/${id}.jpeg`);
   }
+};
+
+const getRandomIndex = (length: number): number =>
+  Math.floor(Math.random() * Math.floor(length));
+
+export const getRandomFile = async (): Promise<File> => {
+  const [allFiles] = await storage.bucket(`${BUCKET_NAME}`).getFiles({
+    autoPaginate: false,
+  });
+
+  const allPictures = allFiles.filter(file => file.name.includes('.'));
+  const randomIndex = getRandomIndex(allPictures.length);
+  return allPictures[randomIndex];
 };
