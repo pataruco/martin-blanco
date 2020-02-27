@@ -3,20 +3,20 @@
   "info": {
     "description": "Martin Blanco API",
     "title": "Martin Blanco API",
-    "version": "1"
+    "version": "2.0"
   },
   "paths": {
     "/": {
       "get": {
-        "tags": ["base"],
-        "summary": "description of the API",
+        "tags": ["Base"],
+        "description": "Open API 📡 for 👨‍👩‍👧‍👦",
         "responses": {
           "200": {
-            "description": "description of endpoints",
+            "description": "Returns an HTML file with the Open API description of this API",
             "content": {
-              "application/json": {
+              "text/html": {
                 "schema": {
-                  "$ref": "#/components/schemas/ApiDescription"
+                  "$ref": "#/components/schemas/Api"
                 }
               }
             }
@@ -24,66 +24,42 @@
         }
       }
     },
-    "/dates": {
+    "/pictures/date/{year}": {
       "get": {
-        "tags": ["dates"],
-        "summary": "List all dates available",
-        "responses": {
-          "200": {
-            "description": "Successful operation",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Dates"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/date/{dateId}": {
-      "get": {
-        "tags": ["date"],
-        "summary": "Retrieve an specific date",
+        "tags": ["Pictures"],
+        "description": "Year",
         "parameters": [
           {
-            "name": "dateId",
-            "in": "path",
-            "description": "The id of the date to retrieve",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
+            "$ref": "#/components/parameters/year"
           }
         ],
         "responses": {
           "200": {
-            "description": "Successful operation",
+            "description": "Returns all pictures by year",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Date"
+                  "$ref": "#/components/schemas/YearPayload"
                 }
               }
             }
           },
-          "204": {
-            "description": "Date not found",
+          "404": {
+            "description": "Files not found",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ErrorMessage"
+                  "$ref": "#/components/schemas/FilesNotFound"
                 }
               }
             }
           },
-          "400": {
-            "description": "Date format should be ISO",
+          "500": {
+            "description": "Error, Server give up 💥",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ErrorMessage"
+                  "$ref": "#/components/schemas/Error500"
                 }
               }
             }
@@ -91,80 +67,45 @@
         }
       }
     },
-    "/date/{dateId}/{fileId}": {
+    "/pictures/date/{year}/{month}": {
       "get": {
-        "tags": ["date"],
-        "summary": "Retrieve an specific file from a date",
+        "tags": ["Pictures"],
+        "description": "Year/Month",
         "parameters": [
           {
-            "name": "dateId",
-            "in": "path",
-            "description": "The id of the date to retrieve",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
+            "$ref": "#/components/parameters/year"
           },
           {
-            "name": "fileId",
-            "in": "path",
-            "description": "The id of the date to retrieve",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
+            "$ref": "#/components/parameters/month"
           }
         ],
         "responses": {
           "200": {
-            "description": "Successful operation",
-            "headers": {
-              "Content-type": {
-                "description": "Type of file",
-                "schema": {
-                  "type": "string"
-                }
-              }
-            },
+            "description": "Returns all pictures by year and month",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/File"
-                }
-              },
-              "image/jpeg": {
-                "schema": {
-                  "$ref": "#/components/schemas/File"
+                  "$ref": "#/components/schemas/MonthPayload"
                 }
               }
             }
           },
-          "204": {
-            "description": "Content not found",
+          "404": {
+            "description": "Files not found",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ErrorMessage"
-                }
-              },
-              "image/jpeg": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorMessage"
+                  "$ref": "#/components/schemas/FilesNotFound"
                 }
               }
             }
           },
-          "400": {
-            "description": "Date should be YYYY-MM-DD",
+          "500": {
+            "description": "Error, Server give up 💥",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ErrorMessage"
-                }
-              },
-              "image/jpeg": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorMessage"
+                  "$ref": "#/components/schemas/Error500"
                 }
               }
             }
@@ -172,45 +113,48 @@
         }
       }
     },
-    "/random": {
+    "/pictures/date/{year}/{month}/{day}": {
       "get": {
-        "tags": ["random"],
-        "summary": "Retrieve a random file",
+        "tags": ["Pictures"],
+        "description": "Year/Month/Day",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/year"
+          },
+          {
+            "$ref": "#/components/parameters/month"
+          },
+          {
+            "$ref": "#/components/parameters/day"
+          }
+        ],
         "responses": {
           "200": {
-            "description": "Successful operation",
-            "headers": {
-              "Content-type": {
-                "description": "Type of file",
-                "schema": {
-                  "type": "string"
-                }
-              }
-            },
+            "description": "Returns all pictures by year and month and day",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/File"
-                }
-              },
-              "image/jpeg": {
-                "schema": {
-                  "$ref": "#/components/schemas/File"
+                  "$ref": "#/components/schemas/DayPayload"
                 }
               }
             }
           },
-          "400": {
-            "description": "picture not found",
+          "404": {
+            "description": "Files not found",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ErrorMessage"
+                  "$ref": "#/components/schemas/FilesNotFound"
                 }
-              },
-              "image/jpeg": {
+              }
+            }
+          },
+          "500": {
+            "description": "Error, Server give up 💥",
+            "content": {
+              "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ErrorMessage"
+                  "$ref": "#/components/schemas/Error500"
                 }
               }
             }
@@ -218,17 +162,93 @@
         }
       }
     },
-    "/updated": {
+    "/pictures/date/{year}/{month}/{day}/{id}": {
       "get": {
-        "tags": ["updated"],
-        "summary": "Last update",
+        "tags": ["Pictures"],
+        "description": "Year/Month/Day",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/year"
+          },
+          {
+            "$ref": "#/components/parameters/month"
+          },
+          {
+            "$ref": "#/components/parameters/day"
+          },
+          {
+            "$ref": "#/components/parameters/id"
+          }
+        ],
         "responses": {
           "200": {
-            "description": "Successful operation",
+            "description": "Year/Month/Day/ID",
+            "content": {
+              "image/*": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary",
+                  "description": "An image"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Files not found",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Update"
+                  "$ref": "#/components/schemas/FilesNotFound"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error, Server give up 💥",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error500"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/pictures/random": {
+      "get": {
+        "tags": ["Pictures"],
+        "description": "Random",
+        "responses": {
+          "200": {
+            "description": "Random picture",
+            "content": {
+              "image/*": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary",
+                  "description": "An image"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Files not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FilesNotFound"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error, Server give up 💥",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error500"
                 }
               }
             }
@@ -239,54 +259,115 @@
   },
   "servers": [
     {
-      "url": "https://peteroftheday/"
+      "url": "https://europe-west2-martin-blanco-api-dev.cloudfunctions.net/martin-blanco-api/",
+      "description": "# Dev environment"
     },
     {
-      "url": "http://peteroftheday/"
+      "url": "https://europe-west2-martin-blanco-api-prod.cloudfunctions.net/martin-blanco-api/",
+      "description": "# Prod environment"
     }
   ],
   "components": {
     "schemas": {
-      "Dates": {
-        "type": "array",
-        "description": "array of dates",
-        "items": {
-          "$ref": "#/components/schemas/Date"
-        }
-      },
-      "Date": {
+      "DayPayload": {
         "type": "object",
         "properties": {
-          "date": {
+          "year": {
             "type": "string",
-            "description": "date"
+            "$ref": "#/components/schemas/Year"
+          },
+          "month": {
+            "type": "string",
+            "$ref": "#/components/schemas/Month"
+          },
+          "day": {
+            "type": "string",
+            "$ref": "#/components/schemas/Day"
           },
           "files": {
             "type": "array",
-            "description": "array of files",
-            "items": {
-              "$ref": "#/components/schemas/File"
-            }
+            "$ref": "#/components/schemas/Files"
           }
+        }
+      },
+      "MonthPayload": {
+        "type": "object",
+        "properties": {
+          "year": {
+            "type": "string",
+            "$ref": "#/components/schemas/Year"
+          },
+          "month": {
+            "type": "string",
+            "$ref": "#/components/schemas/Month"
+          },
+          "files": {
+            "type": "array",
+            "$ref": "#/components/schemas/Files"
+          }
+        }
+      },
+      "FilesNotFound": {
+        "type": "object",
+        "properties": {
+          "year": {
+            "type": "string",
+            "$ref": "#/components/schemas/Year"
+          },
+          "message": {
+            "type": "string",
+            "example": "Files not found"
+          }
+        }
+      },
+      "Error500": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "example": "Error <name of the route function>, Error: <description of the error>"
+          }
+        }
+      },
+      "YearPayload": {
+        "type": "object",
+        "properties": {
+          "year": {
+            "type": "string",
+            "$ref": "#/components/schemas/Year"
+          },
+          "files": {
+            "type": "array",
+            "$ref": "#/components/schemas/Files"
+          }
+        }
+      },
+      "Year": {
+        "type": "number",
+        "description": "## Calendar year starting from 2017",
+        "example": 2017
+      },
+      "Month": {
+        "type": "number",
+        "description": "## Month number in gregorian calendar year",
+        "example": 2
+      },
+      "Day": {
+        "type": "number",
+        "description": "## ## Day number in a month in a gregorian calendar year",
+        "example": 1
+      },
+      "Files": {
+        "type": "array",
+        "description": "array of Files",
+        "items": {
+          "$ref": "#/components/schemas/File"
         }
       },
       "File": {
-        "type": "object",
-        "properties": {
-          "url": {
-            "type": "string",
-            "description": "url of the picture"
-          }
-        }
-      },
-      "Update": {
-        "type": "object",
-        "description": "date of the last update",
-        "properties": {
-          "update": {
-            "type": "string"
-          }
-        }
+        "type": "string",
+        "description": "## An URL of a file",
+        "example": "https://storage.googleapis.com/martin-blanco/pictures/2017/01/25/2.jpeg"
       },
       "ErrorMessage": {
         "type": "object",
@@ -297,15 +378,50 @@
           }
         }
       },
-      "ApiDescription": {
-        "type": "object",
-        "properties": {
-          "description": {
-            "type": "string"
-          },
-          "schema": {
-            "type": "string"
-          }
+      "Api": {
+        "type": "string",
+        "description": "Open API📡"
+      }
+    },
+    "parameters": {
+      "year": {
+        "name": "year",
+        "in": "path",
+        "required": true,
+        "description": "## Calendar year starting from 2017",
+        "example": "2017",
+        "schema": {
+          "type": "number"
+        }
+      },
+      "month": {
+        "name": "month",
+        "in": "path",
+        "required": true,
+        "description": "## Month number in gregorian calendar year",
+        "example": "1",
+        "schema": {
+          "type": "number"
+        }
+      },
+      "day": {
+        "name": "day",
+        "in": "path",
+        "required": true,
+        "description": "## Day number in a month in a gregorian calendar year",
+        "example": "22",
+        "schema": {
+          "type": "number"
+        }
+      },
+      "id": {
+        "name": "id",
+        "in": "path",
+        "required": true,
+        "description": "## Number of picture in a day",
+        "example": "1",
+        "schema": {
+          "type": "number"
         }
       }
     }
