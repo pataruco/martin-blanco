@@ -1,7 +1,7 @@
 // eslint-disable-next-line no-unused-vars
 import express, { Request, Response } from 'express';
 import Joi from '@hapi/joi';
-import { getFilesBy, getFileById } from '../../models/picture';
+import { getFilesBy, getFileById, getRandomFile } from '../../models/picture';
 
 const router = express.Router();
 
@@ -171,10 +171,33 @@ const getPictureById = async (
   }
 };
 
+const getRandomPicture = async (
+  _req: Request,
+  res: Response,
+): Promise<Response> => {
+  try {
+    const file = await getRandomFile();
+
+    if (file && (await file.exists())) {
+      const [downdloadedFile] = await file.download();
+      res.set('content-type', 'image/jpeg');
+      return res.send(downdloadedFile);
+    } else {
+      return res.status(404).json({
+        message: 'File not found',
+      });
+    }
+  } catch (error) {
+    return res.status(500).json({
+      message: `Error getRandomPicture, Error: ${error}`,
+    });
+  }
+};
+
 router.get('/pictures/date/:year', getPicturesByYear);
 router.get('/pictures/date/:year/:month', getPicturesByMonth);
 router.get('/pictures/date/:year/:month/:day', getPicturesByDay);
 router.get('/pictures/date/:year/:month/:day/:id', getPictureById);
-// TODO: random picture
+router.get('/pictures/random', getRandomPicture);
 
 export default router;

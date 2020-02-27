@@ -13,7 +13,8 @@
 - [x] Render swagger file en root
 - [x] Move files to develop environment
 - [x] Create an util for get files
-- [ ] Workout roots
+- [x] Workout roots
+- [ ] Refactor swagger file
 - [ ] Create an upload endpoint
-- [ ] Create URLs for development and production
 - [ ] Enable winston to log to StackDriver
+- [ ] Create URLs for development and production
