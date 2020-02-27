@@ -1,8 +1,8 @@
 # Martin Blanco API
 
-![Production pipeline](https://github.com/pataruco/martin-blanco/workflows/Production%20pipeline/badge.svg?branch=master)
+![CI Prod](https://github.com/pataruco/martin-blanco/workflows/Production%20pipeline/badge.svg?branch=master)
 
-![Development pipeline](https://github.com/pataruco/martin-blanco/workflows/Development%20pipeline/badge.svg)
+![CI Dev](https://github.com/pataruco/martin-blanco/workflows/Development%20pipeline/badge.svg)
 
 ## To do
 
@@ -14,7 +14,7 @@
 - [x] Move files to develop environment
 - [x] Create an util for get files
 - [x] Workout roots
-- [ ] Refactor swagger file
+- [x] Refactor swagger file
 - [ ] Create an upload endpoint
 - [ ] Enable winston to log to StackDriver
 - [ ] Create URLs for development and production
