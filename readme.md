@@ -2,7 +2,7 @@
 
 ![CI Prod](https://github.com/pataruco/martin-blanco/workflows/CI%20Prod/badge.svg)
 
-![CI Dev](https://github.com/pataruco/martin-blanco/workflows/Development%20pipeline/badge.svg)
+![CI Dev](https://github.com/pataruco/martin-blanco/workflows/CI%20Dev/badge.svg)
 
 ## To do
 
