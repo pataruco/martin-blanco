@@ -379,8 +379,18 @@
         }
       },
       "Api": {
-        "type": "string",
-        "description": "Open API📡"
+        "type": "object",
+        "description": "Open API Schema documentation📡",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Martin Blanco API"
+          },
+          "schemaUrl": {
+            "type": "string",
+            "example": "https://documenter.getpostman.com/view/61112/SzKZsbGy"
+          }
+        }
       }
     },
     "parameters": {
