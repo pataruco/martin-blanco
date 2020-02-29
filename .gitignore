@@ -9,6 +9,3 @@ src/importer/input/*
 !src/importer/input/.gitkeep
 src/importer/output/*
 !src/importer/output/.gitkeep
-
-# Open API
-redoc-static.html

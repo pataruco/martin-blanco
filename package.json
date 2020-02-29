@@ -51,7 +51,7 @@
     "deploy:prod": "bash ./scripts/deploy-prod.sh",
     "dev": "yarn nodemon ./src/index.ts",
     "importer": "yarn ts-node ./src/importer/index.ts",
-    "open-api": "bash ./scripts/open-api-generate.sh"
+    "open-api": "open https://documenter.getpostman.com/view/61112/SzKZsbGy?version=latest"
   },
   "version": "1.0.0"
 }
