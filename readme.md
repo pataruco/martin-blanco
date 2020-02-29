@@ -3,6 +3,8 @@
 ![CI Prod](https://github.com/pataruco/martin-blanco/workflows/CI%20Prod/badge.svg)
 ![CI Dev](https://github.com/pataruco/martin-blanco/workflows/CI%20Dev/badge.svg)
 
+[![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/8f4d16a4b130529776a8)
+
 ## To do
 
 - [x] Create terraform models for cloud functions
