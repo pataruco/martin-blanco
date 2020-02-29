@@ -1,5 +1,8 @@
+// eslint-disable-next-line no-unused-vars
 import { Storage, File } from '@google-cloud/storage';
 import dotenv from 'dotenv';
+import { ExifParserFactory } from 'ts-exif-parser';
+import sharp from 'sharp';
 
 dotenv.config();
 
@@ -69,4 +72,61 @@ export const getRandomFile = async (): Promise<File> => {
   const allPictures = allFiles.filter(file => file.name.includes('.'));
   const randomIndex = getRandomIndex(allPictures.length);
   return allPictures[randomIndex];
+};
+
+interface OriginalTime {
+  year: number;
+  month: number;
+  day: number;
+}
+
+const getOriginalTime = async (buffer: Buffer): Promise<OriginalTime> => {
+  const data = await ExifParserFactory.create(buffer).parse();
+  const originalTime =
+    data.tags?.DateTimeOriginal ?? new Date(0).getUTCSeconds();
+  const date = new Date(new Date(0).setUTCSeconds(originalTime));
+  return {
+    year: date.getFullYear(),
+    month: date.getMonth(),
+    day: date.getDate(),
+  };
+};
+
+const getRotatedAndResizeBuffer = async (buffer: Buffer): Buffer =>
+  await sharp(buffer)
+    .rotate()
+    .resize(800)
+    .toBuffer();
+
+interface BufferToupload extends OriginalTime {
+  buffer: Buffer;
+}
+
+const uploadToStorage = async (buffers: BufferToupload[]): string[] => {
+  /*  TODO: 
+    map buffers and per buffer:
+      get files length from getFilesBy({year, month, day})/
+      Set file number base on length
+      Set filename
+      Upload to storage
+      Get path
+      return path
+  */
+};
+
+export const getStoragePaths = async (buffers: Buffer[]) => {
+  const buffersToUpload = await Promise.all(
+    buffers.map(async buffer => {
+      const { year, month, day } = await getOriginalTime(buffer);
+      return {
+        year,
+        month,
+        day,
+        buffer: await getRotatedAndResizeBuffer(buffer),
+      };
+    }),
+  );
+
+  const paths = await uploadToStorage(buffersToUpload);
+  return paths;
 };

@@ -1,7 +1,12 @@
 // eslint-disable-next-line no-unused-vars
 import express, { Request, Response } from 'express';
 import Joi from '@hapi/joi';
-import { getFilesBy, getFileById, getRandomFile } from '../../models/picture';
+import {
+  getFilesBy,
+  getFileById,
+  getRandomFile,
+  getStoragePaths,
+} from '../../models/picture';
 
 const router = express.Router();
 
@@ -194,10 +199,28 @@ const getRandomPicture = async (
   }
 };
 
+const uploadPictures = async (req: Request, res: Response) => {
+  console.log('hit 💋');
+  try {
+    const { files } = await req;
+    // @ts-ignore
+    const filesBuffer: Buffer[] = files.map(
+      (file: Express.Multer.File) => file.buffer,
+    );
+
+    const storagePaths = getStoragePaths(filesBuffer);
+
+    console.log({ filesBuffer });
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 router.get('/pictures/date/:year', getPicturesByYear);
 router.get('/pictures/date/:year/:month', getPicturesByMonth);
 router.get('/pictures/date/:year/:month/:day', getPicturesByDay);
 router.get('/pictures/date/:year/:month/:day/:id', getPictureById);
 router.get('/pictures/random', getRandomPicture);
+router.post('/pictures', uploadPictures);
 
 export default router;
