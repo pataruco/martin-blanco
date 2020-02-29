@@ -12,11 +12,30 @@
         "description": "Open API 📡 for 👨‍👩‍👧‍👦",
         "responses": {
           "200": {
-            "description": "Returns an HTML file with the Open API description of this API",
+            "description": "Returns description of this API",
             "content": {
-              "text/html": {
+              "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Api"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/health": {
+      "get": {
+        "tags": ["Health 🏥"],
+        "description": "Health 🏥",
+        "responses": {
+          "200": {
+            "description": "Health status",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "example": "Ok"
                 }
               }
             }
