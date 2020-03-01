@@ -6,7 +6,60 @@
     "version": "2.0"
   },
   "paths": {
-    "/": {
+    "/pictures": {
+      "post": {
+        "tags": ["Pictures"],
+        "description": "Upload pictures",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "files": {
+                    "type": "array",
+                    "format": "binary"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "filesUploaded": {
+                      "type": "array",
+                      "$ref": "#/components/schemas/Files"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Error uploadPictures"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
       "get": {
         "tags": ["Base"],
         "description": "Open API 📡 for 👨‍👩‍👧‍👦",

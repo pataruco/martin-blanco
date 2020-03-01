@@ -16,6 +16,6 @@
 - [x] Create an util for get files
 - [x] Workout roots
 - [x] Refactor swagger file
-- [ ] Create an upload endpoint
+- [x] Create an upload endpoint
 - [ ] Enable winston to log to StackDriver
 - [ ] Create URLs for development and production

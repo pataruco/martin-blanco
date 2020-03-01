@@ -199,6 +199,7 @@ const getRandomPicture = async (
   }
 };
 
+// FIXME: Check why is not uploading on Google Cloud
 const uploadPictures = async (
   req: Request,
   res: Response,
