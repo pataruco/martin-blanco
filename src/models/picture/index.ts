@@ -3,8 +3,30 @@ import { Storage, File } from '@google-cloud/storage';
 import dotenv from 'dotenv';
 import { ExifParserFactory } from 'ts-exif-parser';
 import sharp from 'sharp';
+import logger from '../../utils/logger';
 
 dotenv.config();
+
+interface OriginalTime {
+  year: number;
+  month: number;
+  day: number;
+}
+
+interface BufferToupload extends OriginalTime {
+  buffer: Buffer;
+  mimetype: string;
+}
+
+export interface Time {
+  year: string;
+  month?: string;
+  day?: string;
+}
+
+interface TimeAndId extends Time {
+  id: string;
+}
 
 const {
   BUCKET_NAME,
@@ -18,16 +40,6 @@ const storage = new Storage({
     private_key,
   },
 });
-
-export interface Time {
-  year: string;
-  month?: string;
-  day?: string;
-}
-
-interface TimeAndId extends Time {
-  id: string;
-}
 
 const getDirectory = (query: Time) => {
   const { year, month, day } = query;
@@ -81,12 +93,6 @@ export const getRandomFile = async (): Promise<File> => {
   return allPictures[randomIndex];
 };
 
-interface OriginalTime {
-  year: number;
-  month: number;
-  day: number;
-}
-
 const getOriginalTime = async (buffer: Buffer): Promise<OriginalTime> => {
   const data = await ExifParserFactory.create(buffer).parse();
   const originalTime =
@@ -105,15 +111,11 @@ const getRotatedAndResizeBuffer = async (buffer: Buffer): Promise<Buffer> =>
     .resize(800)
     .toBuffer();
 
-interface BufferToupload extends OriginalTime {
-  buffer: Buffer;
-}
-
 const getNumberString = (number: number): string =>
   number < 10 ? String(`0${number}`) : String(number);
 
 const getFileName = async (bufferToUpload: BufferToupload): Promise<string> => {
-  const { year, month, day } = bufferToUpload;
+  const { year, month, day, mimetype } = bufferToUpload;
   const yearString = getNumberString(year);
   const monthString = getNumberString(month);
   const dayString = getNumberString(day);
@@ -124,8 +126,10 @@ const getFileName = async (bufferToUpload: BufferToupload): Promise<string> => {
     day: dayString,
   });
 
+  const fileExtension = mimetype.split('/')[1];
   const fileNumber = files.length > 0 ? files.length + 1 : 1;
-  return `pictures/${yearString}/${monthString}/${dayString}/${fileNumber}`;
+
+  return `pictures/${yearString}/${monthString}/${dayString}/${fileNumber}.${fileExtension}`;
 };
 
 const uploadFile = async ({
@@ -140,15 +144,14 @@ const uploadFile = async ({
 
   try {
     await file.save(buffer);
-    console.log(`File ${fileName} saved in storage`);
+    logger.info(`File ${fileName} saved in storage`);
     return `https://storage.googleapis.com/${BUCKET_NAME}/${fileName}`;
   } catch (error) {
-    console.error(`File ${fileName} failed to save in storage, ${error}`);
+    logger.error(`File ${fileName} failed to save in storage, ${error}`);
     throw Error(error);
   }
 };
 
-// TODO: add file extension
 const uploadToStorage = async (
   buffersToUpload: BufferToupload[],
 ): Promise<string[]> =>
@@ -161,18 +164,23 @@ const uploadToStorage = async (
     }),
   );
 
-export const getStoragePaths = async (buffers: Buffer[]): Promise<string[]> => {
+export const getStoragePaths = async (
+  files: Express.Multer.File[],
+): Promise<string[]> => {
   const buffersToUpload = await Promise.all(
-    buffers.map(async buffer => {
+    files.map(async file => {
+      const { buffer, mimetype } = file;
       const { year, month, day } = await getOriginalTime(buffer);
       return {
         year,
         month,
         day,
         buffer: await getRotatedAndResizeBuffer(buffer),
+        mimetype,
       };
     }),
   );
+
   const paths = await uploadToStorage(buffersToUpload);
   return paths;
 };

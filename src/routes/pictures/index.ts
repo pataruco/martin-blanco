@@ -199,18 +199,14 @@ const getRandomPicture = async (
   }
 };
 
-const uploadPictures = async (req: Request, res: Response) => {
+const uploadPictures = async (
+  req: Request,
+  res: Response,
+): Promise<Response> => {
   try {
     const { files } = await req;
     // @ts-ignore
-    const filesBuffer: Buffer[] = files.map(
-      (file: Express.Multer.File) => file.buffer,
-    );
-
-    const storagePaths = await getStoragePaths(filesBuffer);
-
-    console.log({ storagePaths });
-
+    const storagePaths = await getStoragePaths(files);
     return res.status(201).json({
       filesUploaded: storagePaths,
     });
