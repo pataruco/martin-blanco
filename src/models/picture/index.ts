@@ -6,10 +6,17 @@ import sharp from 'sharp';
 
 dotenv.config();
 
-const { PROJECT_ID: projectId, BUCKET_NAME } = process.env;
+const {
+  BUCKET_NAME,
+  CLIENT_EMAIL: client_email,
+  PRIVATE_KEY: private_key,
+} = process.env;
 
 const storage = new Storage({
-  projectId,
+  credentials: {
+    client_email,
+    private_key,
+  },
 });
 
 export interface Time {
@@ -92,7 +99,7 @@ const getOriginalTime = async (buffer: Buffer): Promise<OriginalTime> => {
   };
 };
 
-const getRotatedAndResizeBuffer = async (buffer: Buffer): Buffer =>
+const getRotatedAndResizeBuffer = async (buffer: Buffer): Promise<Buffer> =>
   await sharp(buffer)
     .rotate()
     .resize(800)
@@ -102,19 +109,59 @@ interface BufferToupload extends OriginalTime {
   buffer: Buffer;
 }
 
-const uploadToStorage = async (buffers: BufferToupload[]): string[] => {
-  /*  TODO: 
-    map buffers and per buffer:
-      get files length from getFilesBy({year, month, day})/
-      Set file number base on length
-      Set filename
-      Upload to storage
-      Get path
-      return path
-  */
+const getNumberString = (number: number): string =>
+  number < 10 ? String(`0${number}`) : String(number);
+
+const getFileName = async (bufferToUpload: BufferToupload): Promise<string> => {
+  const { year, month, day } = bufferToUpload;
+  const yearString = getNumberString(year);
+  const monthString = getNumberString(month);
+  const dayString = getNumberString(day);
+
+  const files = await getFilesBy({
+    year: yearString,
+    month: monthString,
+    day: dayString,
+  });
+
+  const fileNumber = files.length > 0 ? files.length + 1 : 1;
+  return `pictures/${yearString}/${monthString}/${dayString}/${fileNumber}`;
 };
 
-export const getStoragePaths = async (buffers: Buffer[]) => {
+const uploadFile = async ({
+  fileName,
+  buffer,
+}: {
+  fileName: string;
+  buffer: BufferToupload['buffer'];
+}): Promise<string> => {
+  const bucket = await storage.bucket(`${BUCKET_NAME}`);
+  const file = await bucket.file(fileName);
+
+  try {
+    await file.save(buffer);
+    console.log(`File ${fileName} saved in storage`);
+    return `https://storage.googleapis.com/${BUCKET_NAME}/${fileName}`;
+  } catch (error) {
+    console.error(`File ${fileName} failed to save in storage, ${error}`);
+    throw Error(error);
+  }
+};
+
+// TODO: add file extension
+const uploadToStorage = async (
+  buffersToUpload: BufferToupload[],
+): Promise<string[]> =>
+  await Promise.all(
+    buffersToUpload.map(async bufferToUpload => {
+      const { buffer } = bufferToUpload;
+      const fileName = await getFileName(bufferToUpload);
+      const filePath = await uploadFile({ fileName, buffer });
+      return filePath;
+    }),
+  );
+
+export const getStoragePaths = async (buffers: Buffer[]): Promise<string[]> => {
   const buffersToUpload = await Promise.all(
     buffers.map(async buffer => {
       const { year, month, day } = await getOriginalTime(buffer);
@@ -126,7 +173,6 @@ export const getStoragePaths = async (buffers: Buffer[]) => {
       };
     }),
   );
-
   const paths = await uploadToStorage(buffersToUpload);
   return paths;
 };
