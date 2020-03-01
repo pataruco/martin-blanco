@@ -200,7 +200,6 @@ const getRandomPicture = async (
 };
 
 const uploadPictures = async (req: Request, res: Response) => {
-  console.log('hit 💋');
   try {
     const { files } = await req;
     // @ts-ignore
@@ -208,11 +207,17 @@ const uploadPictures = async (req: Request, res: Response) => {
       (file: Express.Multer.File) => file.buffer,
     );
 
-    const storagePaths = getStoragePaths(filesBuffer);
+    const storagePaths = await getStoragePaths(filesBuffer);
 
-    console.log({ filesBuffer });
+    console.log({ storagePaths });
+
+    return res.status(201).json({
+      filesUploaded: storagePaths,
+    });
   } catch (error) {
-    console.error(error);
+    return res.status(409).json({
+      message: `Error uploadPictures, Error: ${error}`,
+    });
   }
 };
 

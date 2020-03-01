@@ -44,3 +44,5 @@ jobs:
         shell: bash
         env:
           BUCKET_NAME: ${{ secrets.BUCKET_NAME }}
+          CLIENT_EMAIL: ${{ secrets.GCP_SA_EMAIL }}
+          PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
