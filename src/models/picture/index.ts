@@ -160,6 +160,7 @@ const uploadToStorage = async (
 export const getStoragePaths = async (
   files: Express.Multer.File[],
 ): Promise<string[]> => {
+  logger.info({ files });
   const buffersToUpload = await Promise.all(
     files.map(async file => {
       const { buffer, mimetype } = file;

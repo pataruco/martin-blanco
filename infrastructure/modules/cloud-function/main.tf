@@ -99,3 +99,11 @@ resource "google_cloudfunctions_function_iam_member" "invoker" {
   region         = google_cloudfunctions_function.api.region
   role           = "roles/cloudfunctions.invoker"
 }
+
+resource "google_cloudfunctions_function_iam_member" "service_account_storage" {
+  cloud_function = google_cloudfunctions_function.api.name
+  member         = "serviceAccount:${google_service_account.api_service_account.email}"
+  project        = google_cloudfunctions_function.api.project
+  region         = google_cloudfunctions_function.api.region
+  role           = google_project_iam_binding.api_service_account_roles_binding.role
+}
