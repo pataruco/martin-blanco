@@ -26,6 +26,57 @@ resource "google_storage_bucket_object" "api_zip" {
 }
 
 
+# Service Account
+resource "google_service_account" "api_service_account" {
+  account_id   = "api-service-account"
+  display_name = "api-service-account"
+  project      = var.project
+  description  = "Enable cloud function to call storage"
+
+}
+
+resource "google_service_account_key" "api_service_account_key" {
+  service_account_id = google_service_account.api_service_account.name
+}
+
+resource "google_project_iam_custom_role" "api_service_account_roles" {
+  role_id     = "api_service_account"
+  title       = "api_service_account"
+  description = "Cloud function service account roles"
+  project     = var.project
+  permissions = [
+    "cloudfunctions.functions.call",
+    "cloudfunctions.functions.create",
+    "cloudfunctions.functions.delete",
+    "cloudfunctions.functions.get",
+    "cloudfunctions.functions.invoke",
+    "cloudfunctions.functions.list",
+    "cloudfunctions.functions.sourceCodeGet",
+    "cloudfunctions.functions.sourceCodeSet",
+    "cloudfunctions.functions.update",
+    "cloudfunctions.locations.list",
+    "cloudfunctions.operations.get",
+    "cloudfunctions.operations.list",
+    "storage.buckets.create",
+    "storage.buckets.delete",
+    "storage.buckets.get",
+    "storage.buckets.list",
+    "storage.buckets.update",
+    "storage.objects.create",
+    "storage.objects.delete",
+    "storage.objects.get",
+    "storage.objects.list",
+    "storage.objects.update",
+  ]
+}
+
+resource "google_project_iam_binding" "api_service_account_roles_binding" {
+  role    = "projects/${var.project}/roles/${google_project_iam_custom_role.api_service_account_roles.role_id}"
+  project = var.project
+  members = [
+    "serviceAccount:${google_service_account.api_service_account.email}",
+  ]
+}
 
 resource "google_cloudfunctions_function" "api" {
   available_memory_mb   = 128
@@ -39,7 +90,6 @@ resource "google_cloudfunctions_function" "api" {
   source_archive_object = google_storage_bucket_object.api_zip.name
   trigger_http          = true
 }
-
 
 # IAM entry for all users to invoke the function
 resource "google_cloudfunctions_function_iam_member" "invoker" {
