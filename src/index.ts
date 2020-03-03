@@ -21,6 +21,6 @@ app.use(router);
 
 if (!module.parent) {
   app.listen(PORT, () =>
-    logger.info(`server.listening ${JSON.stringify({ HOST, PORT })}`),
+    logger.info(`server.listening http:\/\/${HOST}:${PORT}`),
   );
 }

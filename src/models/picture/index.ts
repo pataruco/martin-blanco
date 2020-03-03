@@ -133,6 +133,8 @@ const uploadFile = async ({
   const bucket = await storage.bucket(`${BUCKET_NAME}`);
   const file = await bucket.file(fileName);
 
+  logger.info({ bucket, file });
+
   try {
     await file.save(buffer);
     logger.info(`File ${fileName} saved in storage`);
@@ -173,5 +175,6 @@ export const getStoragePaths = async (
   );
 
   const paths = await uploadToStorage(buffersToUpload);
+  logger.info({ buffersToUpload, paths });
   return paths;
 };
