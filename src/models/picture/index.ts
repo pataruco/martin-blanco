@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import { ExifParserFactory } from 'ts-exif-parser';
 import sharp from 'sharp';
 import logger from '../../utils/logger';
+import fetch from 'node-fetch';
 
 dotenv.config();
 
@@ -133,10 +134,27 @@ const uploadFile = async ({
   const bucket = await storage.bucket(`${BUCKET_NAME}`);
   const file = await bucket.file(fileName);
 
-  logger.info({ bucket, file });
+  // logger.info({ bucket, file });
 
   try {
-    await file.save(buffer);
+    // await file.save(buffer);
+    const [url] = await file.getSignedUrl({
+      action: 'write',
+      expires: Date.now() + 60000,
+    });
+
+    const response = await fetch(url, { method: 'PUT', body: buffer });
+
+    if (response.ok) {
+      console.log('💥');
+    }
+
+    const data = await response.text();
+
+    console.log({ response, data, url });
+
+    await file.makePublic();
+
     logger.info(`File ${fileName} saved in storage`);
     return `https://storage.googleapis.com/${BUCKET_NAME}/${fileName}`;
   } catch (error) {
@@ -160,7 +178,7 @@ const uploadToStorage = async (
 export const getStoragePaths = async (
   files: Express.Multer.File[],
 ): Promise<string[]> => {
-  logger.info({ files });
+  // logger.info({ files });
   const buffersToUpload = await Promise.all(
     files.map(async file => {
       const { buffer, mimetype } = file;
@@ -176,6 +194,6 @@ export const getStoragePaths = async (
   );
 
   const paths = await uploadToStorage(buffersToUpload);
-  logger.info({ buffersToUpload, paths });
+  // logger.info({ buffersToUpload, paths });
   return paths;
 };
