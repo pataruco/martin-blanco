@@ -28,18 +28,9 @@ interface TimeAndId extends Time {
   id: string;
 }
 
-const {
-  BUCKET_NAME,
-  CLIENT_EMAIL: client_email,
-  PRIVATE_KEY: private_key,
-} = process.env;
+const { BUCKET_NAME } = process.env;
 
-const storage = new Storage({
-  credentials: {
-    client_email,
-    private_key,
-  },
-});
+const storage = new Storage();
 
 const getDirectory = (query: Time) => {
   const { year, month, day } = query;

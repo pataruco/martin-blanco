@@ -1,38 +1,18 @@
 {
   "author": "Pedro Martin <pataruco@gmail.com>",
-  "dependencies": {
-    "@google-cloud/storage": "^4.3.1",
-    "@hapi/joi": "^17.1.0",
-    "@types/morgan": "^1.7.37",
-    "@types/node": "^13.7.1",
-    "dotenv": "^8.2.0",
-    "express": "^4.17.1",
-    "morgan": "^1.9.1",
-    "multer": "^1.4.2",
-    "sharp": "^0.24.1",
-    "ts-exif-parser": "^0.1.5",
-    "winston": "^3.2.1"
-  },
   "devDependencies": {
-    "@types/express": "^4.17.2",
-    "@types/hapi__joi": "^16.0.11",
-    "@types/multer": "^1.4.2",
-    "@types/sharp": "^0.24.0",
-    "@typescript-eslint/eslint-plugin": "^2.19.2",
-    "@typescript-eslint/parser": "^2.19.2",
     "eslint": "^6.8.0",
     "eslint-config-prettier": "^6.10.0",
     "eslint-plugin-prettier": "^3.1.2",
     "husky": "^4.2.3",
     "lint-staged": "^10.0.7",
-    "nodemon": "^2.0.2",
     "prettier": "^1.19.1",
-    "ts-node": "^8.6.2",
     "typescript": "^3.7.5"
   },
   "husky": {
     "hooks": {
-      "pre-commit": "lint-staged"
+      "pre-commit": "lint-staged",
+      "post-checkout": "yarn"
     }
   },
   "license": "MIT",
@@ -47,15 +27,12 @@
     "*.tf": "bash -c 'terraform fmt -check'"
   },
   "name": "martin-blanco-api",
-  "main": "dist/index.js",
+  "private": true,
   "repository": "git@github.com:pataruco/martin-blanco.git",
-  "scripts": {
-    "build": "bash ./scripts/compile.sh",
-    "deploy:dev": "bash ./scripts/deploy-dev.sh",
-    "deploy:prod": "bash ./scripts/deploy-prod.sh",
-    "dev": "yarn nodemon ./src/index.ts",
-    "importer": "yarn ts-node ./src/importer/index.ts",
-    "open-api": "open https://documenter.getpostman.com/view/61112/SzKZsbGy?version=latest"
-  },
-  "version": "1.0.0"
+  "version": "1.0.0",
+  "workspaces": [
+    "api",
+    "upload-cli",
+    "shared"
+  ]
 }
