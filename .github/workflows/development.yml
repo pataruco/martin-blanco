@@ -4,6 +4,11 @@ on:
     branches:
       - '*'
       - '!master'
+    paths:
+      - 'api/*'
+      - '!infrastructure/*'
+      - '!shared/*'
+      - '!upload-cli/*'
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -17,13 +22,15 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: 10.16.2
-      - run: yarn && yarn build
+      - run: |
+          cd api
+          yarn && yarn build
         shell: bash
       - name: Upload Artifact
         uses: actions/upload-artifact@v1
         with:
           name: api
-          path: ./dist/
+          path: ./api/dist/
   loginInGCP:
     runs-on: ubuntu-latest
     name: Logging into GCP
