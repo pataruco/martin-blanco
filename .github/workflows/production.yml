@@ -3,6 +3,11 @@ on:
   push:
     tags:
       - '*'
+    paths:
+      - 'api/*'
+      - '!infrastructure/*'
+      - '!shared/*'
+      - '!upload-cli/*'
 jobs:
   build:
     runs-on: ubuntu-latest
