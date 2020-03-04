@@ -31,7 +31,7 @@ jobs:
         with:
           name: api
           path: ./api/dist/
-  loginInGCP:
+  deploy:
     runs-on: ubuntu-latest
     name: Logging into GCP
     needs:
@@ -47,9 +47,8 @@ jobs:
           service_account_email: ${{ secrets.GCP_SA_EMAIL }}
           service_account_key: ${{ secrets.GCP_SA_KEY }}
       - run: |
+          cd api
           yarn deploy:dev
         shell: bash
         env:
           BUCKET_NAME: ${{ secrets.BUCKET_NAME }}
-          CLIENT_EMAIL: ${{ secrets.GCP_SA_EMAIL }}
-          PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
