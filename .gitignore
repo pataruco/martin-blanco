@@ -4,8 +4,8 @@ node_modules
 yarn-error.log
 
 api/dist/*
-api/!dist/.gitkeep
+!api/dist/.gitkeep
 api/src/importer/input/*
-api/!src/importer/input/.gitkeep
+!api/src/importer/input/.gitkeep
 api/src/importer/output/*
-api/!src/importer/output/.gitkeep
+!api/src/importer/output/.gitkeep
