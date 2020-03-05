@@ -1,0 +1,7 @@
+{
+  "lerna": "3.20.2",
+  "npmClient": "yarn",
+  "packages": ["api", "upload-cli", "shared"],
+  "useWorkspaces": true,
+  "version": "1.0.0"
+}
