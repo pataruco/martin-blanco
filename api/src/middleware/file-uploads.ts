@@ -15,7 +15,7 @@ const fileFilter = (
     : callback(new Error('File mimetype is not image.'));
 };
 
-const multerMiddleware = multer({
+const multerMiddleware: any = multer({
   storage: multer.memoryStorage(),
   limits: {
     fileSize: 7 * 1024 * 1024, // 7 MB
