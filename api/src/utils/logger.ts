@@ -4,7 +4,10 @@ import { LoggingWinston } from '@google-cloud/logging-winston';
 
 const logger = createLogger({
   format: combine(timestamp(), prettyPrint(), json()),
-  transports: [new transports.Console(), new LoggingWinston({})],
+  transports: [
+    new transports.Console(),
+    new LoggingWinston({ inspectMetadata: true }),
+  ],
   exitOnError: false,
 });
 

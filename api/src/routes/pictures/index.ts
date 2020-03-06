@@ -181,7 +181,7 @@ const getRandomPicture = async (
     if (file && (await file.exists())) {
       const [downdloadedFile] = await file.download();
       res.set('content-type', 'image/jpeg');
-      return res.send(downdloadedFile);
+      return res.status(200).send(downdloadedFile);
     } else {
       return res.status(404).json({
         message: 'File not found',

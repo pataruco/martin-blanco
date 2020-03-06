@@ -4,12 +4,14 @@ import logger from '../utils/logger';
 
 const httpLoggerMiddleware = async (
   req: Request,
-  _res: Response,
-  done: NextFunction,
+  res: Response,
+  next: NextFunction,
 ) => {
   const { method, url, hostname, body } = req;
-  logger.info({ method, url, hostname, body });
-  done();
+  const { statusCode, statusMessage } = res;
+  logger.info({ req: { method, url, hostname, body } });
+  logger.info({ res: { url, statusCode, statusMessage } });
+  next();
 };
 
 export default httpLoggerMiddleware;
