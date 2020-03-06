@@ -1,10 +1,10 @@
 import { createLogger, format, transports } from 'winston';
-const { label, combine, timestamp, prettyPrint } = format;
-// TODO: Add Google StackDriver integration https://github.com/winstonjs/winston/blob/master/docs/transports.md#google-stackdriver-transport
+const { combine, timestamp, prettyPrint, json } = format;
+import { LoggingWinston } from '@google-cloud/logging-winston';
 
 const logger = createLogger({
-  format: combine(timestamp(), prettyPrint(), label()),
-  transports: [new transports.Console()],
+  format: combine(timestamp(), prettyPrint(), json()),
+  transports: [new transports.Console(), new LoggingWinston({})],
   exitOnError: false,
 });
 
