@@ -3,6 +3,10 @@
 ![CI Prod](https://github.com/pataruco/martin-blanco/workflows/CI%20Prod/badge.svg)
 ![CI Dev](https://github.com/pataruco/martin-blanco/workflows/CI%20Dev/badge.svg)
 
+[![lerna](https://img.shields.io/badge/maintained%20with-lerna-cc00ff.svg)](https://lerna.js.org/)[![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
+
+<img src="http://validator.swagger.io/validator?url=https://raw.githubusercontent.com/pataruco/martin-blanco/master/api/src/open-api/open-api-schema.json">
+
 [![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/8f4d16a4b130529776a8)
 
 ## To do
