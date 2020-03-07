@@ -1,6 +1,7 @@
 import path from 'path';
 import { promises as fs } from 'fs';
 import { existsSync, mkdirSync } from 'fs';
+import sharp from 'sharp';
 
 const filesOnDesktop = '/Users/pataruco/Desktop/test-files';
 
@@ -22,11 +23,19 @@ const geFile = async (path: string): Promise<Buffer> => {
   }
 };
 
+const getRotatedAndResizeBuffer = async (buffer: Buffer): Promise<Buffer> =>
+  await sharp(buffer)
+    .rotate()
+    .resize(800)
+    .toBuffer();
+
 const start = async () => {
   await Promise.all(
     (await getFilesByPath(filesOnDesktop)).map(async file => {
+      // get file
       const buffer = await geFile(file);
-      // rotate
+      // rotate & resize
+      const rotatedAndResizeBuffer = await getRotatedAndResizeBuffer(buffer);
       // get date
       // get ID
       // Create path
