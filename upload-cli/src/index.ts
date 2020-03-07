@@ -1,18 +1,34 @@
-import path from 'path';
-import { promises as fs } from 'fs';
-import sharp from 'sharp';
 import { ExifParserFactory } from 'ts-exif-parser';
+import { promises as fs } from 'fs';
+import { Storage } from '@google-cloud/storage';
 import dotenv from 'dotenv';
-import { Storage, File } from '@google-cloud/storage';
+import path from 'path';
+import sharp from 'sharp';
 
 dotenv.config();
 
 const { BUCKET_NAME } = process.env;
 
+interface OriginalTime {
+  year: number;
+  month: number;
+  day: number;
+}
+
+interface UploadFilePath extends OriginalTime {
+  fileExtension: string;
+}
+
+// TODO: move this to shared lib
+export interface Time {
+  year: string;
+  month?: string;
+  day?: string;
+}
+
 const storage = new Storage();
 
 const filesOnDesktop = path.resolve('../../../Desktop/test-files');
-console.log({ filesOnDesktop });
 
 const getFilesByPath = async (path: string): Promise<string[]> => {
   try {
@@ -38,12 +54,6 @@ const getRotatedAndResizeBuffer = async (buffer: Buffer) =>
     .resize(800)
     .toBuffer();
 
-interface OriginalTime {
-  year: number;
-  month: number;
-  day: number;
-}
-
 const getOriginalTime = async (buffer: Buffer): Promise<OriginalTime> => {
   const data = await ExifParserFactory.create(buffer).parse();
   const originalTime =
@@ -62,23 +72,8 @@ const getFilePath = (file: string): string =>
 
 const getFileExtension = (filePath: string): string => path.extname(filePath);
 
-interface UploadFilePath extends OriginalTime {
-  fileExtension: string;
-}
-
 const getNumberString = (number: number): string =>
   number < 10 ? String(`0${number}`) : String(number);
-
-// TODO: move this to shared lib
-export interface Time {
-  year: string;
-  month?: string;
-  day?: string;
-}
-// TODO: move this to shared lib
-interface TimeAndId extends Time {
-  id: string;
-}
 
 // TODO: move this to shared lib
 const getDirectory = (query: Time) => {
@@ -126,6 +121,9 @@ const getUploadFilePath = async (fileTime: UploadFilePath): Promise<string> => {
   return `pictures/${yearString}/${monthString}/${dayString}/${fileNumber}${fileExtension}`;
 };
 
+const delay = (ms: number): Promise<NodeJS.Timeout> =>
+  new Promise(resolve => setTimeout(resolve, ms));
+
 const uploadFile = async ({
   fileName,
   buffer,
@@ -147,35 +145,34 @@ const uploadFile = async ({
 
 const start = async () => {
   try {
-    return (await Promise.all(await getFilesByPath(filesOnDesktop))).map(
-      async (file: string) => {
-        const filePath = getFilePath(file);
-        const fileExtension = getFileExtension(filePath);
-        // get file
-        const buffer = await getfile(filePath);
-        // rotate and resize
-        const rotatedAndResizeBuffer = await getRotatedAndResizeBuffer(buffer);
-
-        // create path format
-        const { year, month, day } = await getOriginalTime(buffer);
-        // create upload file path
-        const uploadFilePath = await getUploadFilePath({
-          year,
-          month,
-          day,
-          fileExtension,
-        });
-        // upload file
-        await uploadFile({
-          fileName: uploadFilePath,
-          buffer: rotatedAndResizeBuffer,
-        });
-      },
-    );
+    return (await getFilesByPath(filesOnDesktop)).map(async (file: string) => {
+      const filePath = getFilePath(file);
+      const fileExtension = getFileExtension(filePath);
+      // get file
+      const buffer = await getfile(filePath);
+      // rotate and resize
+      const rotatedAndResizeBuffer = await getRotatedAndResizeBuffer(buffer);
+      // create path format
+      const { year, month, day } = await getOriginalTime(buffer);
+      // create upload file path
+      const uploadFilePath = await getUploadFilePath({
+        year,
+        month,
+        day,
+        fileExtension,
+      });
+      // upload file
+      await delay(10000);
+      await uploadFile({
+        fileName: uploadFilePath,
+        buffer: rotatedAndResizeBuffer,
+      });
+    });
   } catch (e) {
     console.error(e);
   }
 };
+
 if (!module.parent) {
   start().then();
 }
