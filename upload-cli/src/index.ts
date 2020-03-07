@@ -145,7 +145,8 @@ const uploadFile = async ({
 
 const start = async () => {
   try {
-    return (await getFilesByPath(filesOnDesktop)).map(async (file: string) => {
+    const filesPath = await getFilesByPath(filesOnDesktop);
+    for (const file of filesPath) {
       const filePath = getFilePath(file);
       const fileExtension = getFileExtension(filePath);
       // get file
@@ -162,12 +163,12 @@ const start = async () => {
         fileExtension,
       });
       // upload file
-      await delay(10000);
+      await delay(100);
       await uploadFile({
         fileName: uploadFilePath,
         buffer: rotatedAndResizeBuffer,
       });
-    });
+    }
   } catch (e) {
     console.error(e);
   }
