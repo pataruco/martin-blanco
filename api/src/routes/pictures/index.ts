@@ -1,7 +1,8 @@
 // eslint-disable-next-line no-unused-vars
 import express, { Request, Response } from 'express';
 import Joi from '@hapi/joi';
-import { getFilesBy, getFileById, getRandomFile } from '../../models/picture';
+import { getFileById, getRandomFile } from '../../models/picture';
+import { getFilesBy } from 'shared/storage';
 
 const router = express.Router();
 

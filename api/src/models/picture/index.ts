@@ -4,6 +4,8 @@ import dotenv from 'dotenv';
 import { ExifParserFactory } from 'ts-exif-parser';
 import sharp from 'sharp';
 import logger from '../../utils/logger';
+// eslint-disable-next-line no-unused-vars
+import { getFilesBy, Time } from 'shared/storage';
 
 dotenv.config();
 
@@ -18,12 +20,6 @@ interface BufferToupload extends OriginalTime {
   mimetype: string;
 }
 
-export interface Time {
-  year: string;
-  month?: string;
-  day?: string;
-}
-
 interface TimeAndId extends Time {
   id: string;
 }
@@ -31,33 +27,6 @@ interface TimeAndId extends Time {
 const { BUCKET_NAME } = process.env;
 
 const storage = new Storage();
-
-const getDirectory = (query: Time) => {
-  const { year, month, day } = query;
-  return day
-    ? `pictures/${year}/${month}/${day}`
-    : month
-    ? `pictures/${year}/${month}`
-    : `pictures/${year}`;
-};
-
-export const getFilesBy = async (query: Time) => {
-  const directory = getDirectory(query);
-
-  const [allFiles] = await storage.bucket(`${BUCKET_NAME}`).getFiles({
-    autoPaginate: false,
-    directory,
-  });
-
-  return await Promise.all(
-    allFiles
-      .filter(file => file.name.includes('.'))
-      .map(
-        async file =>
-          `https://storage.googleapis.com/${BUCKET_NAME}/${file.name}`,
-      ),
-  );
-};
 
 export const getFileById = async (
   query: TimeAndId,
