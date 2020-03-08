@@ -2,5 +2,9 @@
   "name": "shared",
   "version": "1.0.0",
   "main": "index.js",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "@google-cloud/storage": "^4.5.0",
+    "dotenv": "^8.2.0"
+  }
 }
