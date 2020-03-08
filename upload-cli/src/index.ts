@@ -1,4 +1,5 @@
 import { ExifParserFactory } from 'ts-exif-parser';
+import { getFilesBy } from 'shared/src/storage';
 import { promises as fs } from 'fs';
 import { Storage } from '@google-cloud/storage';
 import dotenv from 'dotenv';
@@ -17,13 +18,6 @@ interface OriginalTime {
 
 interface UploadFilePath extends OriginalTime {
   fileExtension: string;
-}
-
-// TODO: move this to shared lib
-export interface Time {
-  year: string;
-  month?: string;
-  day?: string;
 }
 
 const storage = new Storage();
@@ -74,35 +68,6 @@ const getFileExtension = (filePath: string): string => path.extname(filePath);
 
 const getNumberString = (number: number): string =>
   number < 10 ? String(`0${number}`) : String(number);
-
-// TODO: move this to shared lib
-const getDirectory = (query: Time) => {
-  const { year, month, day } = query;
-  return day
-    ? `pictures/${year}/${month}/${day}`
-    : month
-    ? `pictures/${year}/${month}`
-    : `pictures/${year}`;
-};
-
-// TODO: move this to shared lib
-export const getFilesBy = async (query: Time) => {
-  const directory = getDirectory(query);
-
-  const [allFiles] = await storage.bucket(`${BUCKET_NAME}`).getFiles({
-    autoPaginate: false,
-    directory,
-  });
-
-  return await Promise.all(
-    allFiles
-      .filter(file => file.name.includes('.'))
-      .map(
-        async file =>
-          `https://storage.googleapis.com/${BUCKET_NAME}/${file.name}`,
-      ),
-  );
-};
 
 const getUploadFilePath = async (fileTime: UploadFilePath): Promise<string> => {
   const { year, month, day, fileExtension } = fileTime;
