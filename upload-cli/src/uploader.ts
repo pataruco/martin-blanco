@@ -5,10 +5,13 @@ import { Storage } from '@google-cloud/storage';
 import dotenv from 'dotenv';
 import path from 'path';
 import sharp from 'sharp';
+import chalk from 'chalk';
+import { log } from './index';
 
 dotenv.config();
 
 const { BUCKET_NAME } = process.env;
+const DELAY_TIME = 100;
 
 interface OriginalTime {
   year: number;
@@ -21,8 +24,6 @@ interface UploadFilePath extends OriginalTime {
 }
 
 const storage = new Storage();
-
-const filesOnDesktop = path.resolve('../../../Desktop/test-files');
 
 const getFilesByPath = async (path: string): Promise<string[]> => {
   try {
@@ -104,7 +105,6 @@ const uploadFile = async ({
   const file = await bucket.file(fileName);
   try {
     await file.save(buffer);
-    console.log(`File ${fileName} saved in storage`);
     return `https://storage.googleapis.com/${BUCKET_NAME}/${fileName}`;
   } catch (error) {
     console.error(`File ${fileName} failed to save in storage, ${error}`);
@@ -118,18 +118,32 @@ interface UploaderIO {
 }
 
 const main = async ({ source, target }: UploaderIO): Promise<void> => {
+  // TODO: set Google Creds for source
   console.log({ target });
   try {
+    log(chalk`Get files from: {green ${source}}`);
+
     const filesPath = await getFilesByPath(source);
+    const total = filesPath.length;
+    let counter = 1;
+
     for (const file of filesPath) {
+      log(chalk`{inverse ${counter} of ${total}}`);
+
       const filePath = getFilePath({ file, source });
       const fileExtension = getFileExtension(filePath);
+
       // get file
+      log(chalk`Get file from: {yellow ${filePath}}`);
       const buffer = await getfile(filePath);
+
       // rotate and resize
+      log(chalk`Resizing and rotating image: {blue ${filePath}} 📷`);
       const rotatedAndResizeBuffer = await getRotatedAndResizeBuffer(buffer);
+
       // create path format
       const { year, month, day } = await getOriginalTime(buffer);
+
       // create upload file path
       const uploadFilePath = await getUploadFilePath({
         year,
@@ -137,16 +151,23 @@ const main = async ({ source, target }: UploaderIO): Promise<void> => {
         day,
         fileExtension,
       });
+      log(chalk`Get target {magenta ${uploadFilePath}} for image ${filePath}`);
+
       // upload file
-      await delay(100);
+      log(chalk`{bgYellow {black Delaying for ${DELAY_TIME}ms}}`);
+      await delay(DELAY_TIME);
       await uploadFile({
         fileName: uploadFilePath,
         buffer: rotatedAndResizeBuffer,
       });
+      log(
+        chalk`{bold File ${uploadFilePath} uploaded to ${uploadFilePath}} 💥`,
+      );
+      counter++;
     }
   } catch (e) {
     console.error(e);
-    throw Error(`Error processing upload,${e} `);
+    throw Error(`Error processing upload. ${e}`);
   }
 };
 
