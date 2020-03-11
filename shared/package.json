@@ -1,5 +1,5 @@
 {
-  "name": "shared",
+  "name": "@pataruco/shared",
   "version": "1.0.0",
   "main": "index.js",
   "typings": "index.d.ts",
@@ -7,5 +7,13 @@
   "dependencies": {
     "@google-cloud/storage": "^4.5.0",
     "dotenv": "^8.2.0"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
+  },
+  "typings": "index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:pataruco/martin-blanco.git"
   }
 }
