@@ -2,7 +2,8 @@
 set -euo pipefail
 
 # Copy .npmrc
-cp ./.npmrc ./dist
+echo registry=https://npm.pkg.github.com/@pataruco >>./dist/.npmrc
+echo //npm.pkg.github.com/:_authToken=${GITHUB_REGISTRY_AUTH_TOKEN} >>./dist/.npmrc
 
 # Copy package json
 cp ./package.json ./dist
