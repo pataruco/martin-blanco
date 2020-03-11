@@ -1,6 +1,9 @@
 #!/bin/bash
 set -euo pipefail
 
+# Copy .npmrc
+cp ./.npmrc ./dist
+
 # Copy package json
 cp ./package.json ./dist
 
