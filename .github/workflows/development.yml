@@ -26,6 +26,8 @@ jobs:
           cd api
           yarn && yarn build
         shell: bash
+        env:
+          GITHUB_REGISTRY_AUTH_TOKEN: ${{ secrets.GITHUB_REGISTRY_AUTH_TOKEN }}
       - name: Upload Artifact
         uses: actions/upload-artifact@v1
         with:
@@ -48,6 +50,8 @@ jobs:
           service_account_key: ${{ secrets.GCP_SA_KEY }}
       - run: |
           cd api
+          ls -lah 
+          cat .npmrc
           yarn deploy:dev
         shell: bash
         env:
