@@ -1,5 +1,5 @@
 import { ExifParserFactory } from 'ts-exif-parser';
-import { getFilesBy } from 'shared';
+import { getFilesBy } from '@pataruco/shared';
 import { promises as fs } from 'fs';
 import { Storage } from '@google-cloud/storage';
 import dotenv from 'dotenv';
