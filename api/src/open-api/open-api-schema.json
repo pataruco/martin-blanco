@@ -287,7 +287,9 @@
           },
           "files": {
             "type": "array",
-            "$ref": "#/components/schemas/Files"
+            "items": {
+              "$ref": "#/components/schemas/Files"
+            }
           }
         }
       },
@@ -304,7 +306,9 @@
           },
           "files": {
             "type": "array",
-            "$ref": "#/components/schemas/Files"
+            "items": {
+              "$ref": "#/components/schemas/Files"
+            }
           }
         }
       },
@@ -339,7 +343,9 @@
           },
           "files": {
             "type": "array",
-            "$ref": "#/components/schemas/Files"
+            "items": {
+              "$ref": "#/components/schemas/Files"
+            }
           }
         }
       },
