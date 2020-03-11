@@ -15,5 +15,8 @@
   "repository": {
     "type": "git",
     "url": "git@github.com:pataruco/martin-blanco.git"
+  },
+  "scripts": {
+    "publish": "sh ./scripts/publish-package.sh"
   }
 }
