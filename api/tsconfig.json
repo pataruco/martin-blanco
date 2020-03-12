@@ -66,10 +66,5 @@
     "resolveJsonModule": true
   },
   "include": ["src/*.ts"],
-  "exclude": ["node_modules"],
-  "references": [
-    {
-      "path": "../shared/tsconfig.json"
-    }
-  ]
+  "exclude": ["node_modules"]
 }
