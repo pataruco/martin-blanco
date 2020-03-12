@@ -1,12 +1,11 @@
 import { ExifParserFactory } from 'ts-exif-parser';
-// import { getFilesBy } from '@pataruco/shared';
+import { log } from './index';
 import { promises as fs } from 'fs';
 import { Storage } from '@google-cloud/storage';
+import chalk from 'chalk';
 import dotenv from 'dotenv';
 import path from 'path';
 import sharp from 'sharp';
-import chalk from 'chalk';
-import { log } from './index';
 
 dotenv.config();
 
@@ -29,8 +28,6 @@ interface UploadFilePath extends OriginalTime {
   fileExtension: string;
 }
 
-const storage = new Storage();
-
 export interface Time {
   year: string;
   month?: string;
@@ -48,7 +45,7 @@ export const getDirectory = (query: Time) => {
 
 export const getFilesBy = async (query: Time) => {
   const directory = getDirectory(query);
-
+  const storage = new Storage();
   const [allFiles] = await storage.bucket(`${BUCKET_NAME}`).getFiles({
     autoPaginate: false,
     directory,
@@ -140,6 +137,7 @@ const uploadFile = async ({
   fileName: string;
   buffer: Buffer;
 }): Promise<string> => {
+  const storage = new Storage();
   const bucket = await storage.bucket(`${BUCKET_NAME}`);
   const file = await bucket.file(fileName);
   try {
@@ -173,14 +171,12 @@ const setEnvironment = async (target: UploaderIO['target']): Promise<void> =>
         GOOGLE_APPLICATION_CREDENTIALS: GOOGLE_CREDENTIALS_PROD,
       };
     }
-    console.log(process.env);
     resolve();
   });
 
 const main = async ({ source, target }: UploaderIO): Promise<void> => {
-  // TODO: set Google Creds for source
-  console.log({ target });
   await setEnvironment(target);
+
   try {
     log(chalk`Get files from: {green ${source}}`);
 
