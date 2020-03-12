@@ -10,7 +10,13 @@ import { log } from './index';
 
 dotenv.config();
 
-const { BUCKET_NAME } = process.env;
+let BUCKET_NAME: string;
+const {
+  BUCKET_NAME_DEV,
+  BUCKET_NAME_PROD,
+  GOOGLE_CREDENTIALS_DEV,
+  GOOGLE_CREDENTIALS_PROD,
+} = process.env;
 const DELAY_TIME = 100;
 
 interface OriginalTime {
@@ -117,9 +123,31 @@ interface UploaderIO {
   target: 'development' | 'production';
 }
 
+const setEnvironment = async (target: UploaderIO['target']): Promise<void> =>
+  new Promise(resolve => {
+    if (target === 'development') {
+      BUCKET_NAME = BUCKET_NAME_DEV ?? '';
+      process.env = {
+        ...process.env,
+        GOOGLE_APPLICATION_CREDENTIALS: GOOGLE_CREDENTIALS_DEV,
+      };
+    }
+
+    if (target === 'production') {
+      BUCKET_NAME = BUCKET_NAME_PROD ?? '';
+      process.env = {
+        ...process.env,
+        GOOGLE_APPLICATION_CREDENTIALS: GOOGLE_CREDENTIALS_PROD,
+      };
+    }
+    console.log(process.env);
+    resolve();
+  });
+
 const main = async ({ source, target }: UploaderIO): Promise<void> => {
   // TODO: set Google Creds for source
   console.log({ target });
+  await setEnvironment(target);
   try {
     log(chalk`Get files from: {green ${source}}`);
 
