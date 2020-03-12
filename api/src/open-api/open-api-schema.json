@@ -1,5 +1,5 @@
 {
-  "openapi": "3.0.0",
+  "swagger": "2.0.0",
   "info": {
     "description": "Martin Blanco API",
     "title": "Martin Blanco API",

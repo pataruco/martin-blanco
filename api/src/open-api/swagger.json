@@ -1,0 +1,413 @@
+{
+  "info": {
+    "description": "Martin Blanco API",
+    "title": "Martin Blanco API",
+    "version": "2.0"
+  },
+  "paths": {
+    "/health": {
+      "get": {
+        "tags": ["Health 🏥"],
+        "description": "Health 🏥",
+        "operationId": "getHealth",
+        "responses": {
+          "200": {
+            "description": "Health status",
+            "schema": {
+              "type": "string",
+              "example": "Ok"
+            }
+          }
+        },
+        "parameters": []
+      }
+    },
+    "/pictures/date/{year}": {
+      "get": {
+        "tags": ["Pictures"],
+        "description": "Year",
+        "operationId": "getPictureByYear",
+        "parameters": [
+          {
+            "name": "year",
+            "in": "path",
+            "required": true,
+            "description": "## Calendar year starting from 2017",
+            "type": "number"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns all pictures by year",
+            "schema": {
+              "$ref": "#/definitions/YearPayload"
+            }
+          },
+          "404": {
+            "description": "Files not found",
+            "schema": {
+              "$ref": "#/definitions/FilesNotFound"
+            }
+          },
+          "500": {
+            "description": "Error, Server give up 💥",
+            "schema": {
+              "$ref": "#/definitions/Error500"
+            }
+          }
+        }
+      }
+    },
+    "/pictures/date/{year}/{month}": {
+      "get": {
+        "tags": ["Pictures"],
+        "description": "Year/Month",
+        "operationId": "getPictureByYearMonth",
+        "parameters": [
+          {
+            "name": "year",
+            "in": "path",
+            "required": true,
+            "description": "## Calendar year starting from 2017",
+            "type": "number"
+          },
+          {
+            "name": "month",
+            "in": "path",
+            "required": true,
+            "description": "## Month number in gregorian calendar year",
+            "type": "number"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns all pictures by year and month",
+            "schema": {
+              "$ref": "#/definitions/MonthPayload"
+            }
+          },
+          "404": {
+            "description": "Files not found",
+            "schema": {
+              "$ref": "#/definitions/FilesNotFound"
+            }
+          },
+          "500": {
+            "description": "Error, Server give up 💥",
+            "schema": {
+              "$ref": "#/definitions/Error500"
+            }
+          }
+        }
+      }
+    },
+    "/pictures/date/{year}/{month}/{day}": {
+      "get": {
+        "tags": ["Pictures"],
+        "description": "Year/Month/Day",
+        "operationId": "getPictureByYearMonthDay",
+        "parameters": [
+          {
+            "name": "year",
+            "in": "path",
+            "required": true,
+            "description": "## Calendar year starting from 2017",
+            "type": "number"
+          },
+          {
+            "name": "month",
+            "in": "path",
+            "required": true,
+            "description": "## Month number in gregorian calendar year",
+            "type": "number"
+          },
+          {
+            "name": "day",
+            "in": "path",
+            "required": true,
+            "description": "## Day number in a month in a gregorian calendar year",
+            "type": "number"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns all pictures by year and month and day",
+            "schema": {
+              "$ref": "#/definitions/DayPayload"
+            }
+          },
+          "404": {
+            "description": "Files not found",
+            "schema": {
+              "$ref": "#/definitions/FilesNotFound"
+            }
+          },
+          "500": {
+            "description": "Error, Server give up 💥",
+            "schema": {
+              "$ref": "#/definitions/Error500"
+            }
+          }
+        }
+      }
+    },
+    "/pictures/date/{year}/{month}/{day}/{id}": {
+      "get": {
+        "tags": ["Pictures"],
+        "description": "Year/Month/Day",
+        "operationId": "getPictureByYearMonthDayId",
+        "parameters": [
+          {
+            "name": "year",
+            "in": "path",
+            "required": true,
+            "description": "## Calendar year starting from 2017",
+            "type": "number"
+          },
+          {
+            "name": "month",
+            "in": "path",
+            "required": true,
+            "description": "## Month number in gregorian calendar year",
+            "type": "number"
+          },
+          {
+            "name": "day",
+            "in": "path",
+            "required": true,
+            "description": "## Day number in a month in a gregorian calendar year",
+            "type": "number"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "## Number of picture in a day",
+            "type": "number"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Year/Month/Day/ID",
+            "schema": {
+              "type": "string",
+              "description": "An image"
+            }
+          },
+          "404": {
+            "description": "Files not found",
+            "schema": {
+              "$ref": "#/definitions/FilesNotFound"
+            }
+          },
+          "500": {
+            "description": "Error, Server give up 💥",
+            "schema": {
+              "$ref": "#/definitions/Error500"
+            }
+          }
+        }
+      }
+    },
+    "/pictures/random": {
+      "get": {
+        "tags": ["Pictures"],
+        "description": "Random",
+        "operationId": "getRandomPicture",
+        "responses": {
+          "200": {
+            "description": "Random picture",
+            "schema": {
+              "type": "string",
+              "description": "An image"
+            }
+          },
+          "404": {
+            "description": "Files not found",
+            "schema": {
+              "$ref": "#/definitions/FilesNotFound"
+            }
+          },
+          "500": {
+            "description": "Error, Server give up 💥",
+            "schema": {
+              "$ref": "#/definitions/Error500"
+            }
+          }
+        },
+        "parameters": []
+      }
+    }
+  },
+  "swagger": "2.0",
+  "schemes": ["https"],
+  "host": "martin-blanco-api-prod.appspot.com",
+  "basePath": "/",
+  "definitions": {
+    "DayPayload": {
+      "type": "object",
+      "properties": {
+        "year": {
+          "type": "string",
+          "$ref": "#/definitions/Year"
+        },
+        "month": {
+          "type": "string",
+          "$ref": "#/definitions/Month"
+        },
+        "day": {
+          "type": "string",
+          "$ref": "#/definitions/Day"
+        },
+        "files": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Files"
+          }
+        }
+      }
+    },
+    "MonthPayload": {
+      "type": "object",
+      "properties": {
+        "year": {
+          "type": "string",
+          "$ref": "#/definitions/Year"
+        },
+        "month": {
+          "type": "string",
+          "$ref": "#/definitions/Month"
+        },
+        "files": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Files"
+          }
+        }
+      }
+    },
+    "FilesNotFound": {
+      "type": "object",
+      "properties": {
+        "year": {
+          "type": "string",
+          "$ref": "#/definitions/Year"
+        },
+        "message": {
+          "type": "string",
+          "example": "Files not found"
+        }
+      }
+    },
+    "Error500": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "example": "Error <name of the route function>, Error: <description of the error>"
+        }
+      }
+    },
+    "YearPayload": {
+      "type": "object",
+      "properties": {
+        "year": {
+          "type": "string",
+          "$ref": "#/definitions/Year"
+        },
+        "files": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Files"
+          }
+        }
+      }
+    },
+    "Year": {
+      "type": "number",
+      "description": "## Calendar year starting from 2017",
+      "example": 2017
+    },
+    "Month": {
+      "type": "number",
+      "description": "## Month number in gregorian calendar year",
+      "example": 2
+    },
+    "Day": {
+      "type": "number",
+      "description": "## ## Day number in a month in a gregorian calendar year",
+      "example": 1
+    },
+    "Files": {
+      "type": "array",
+      "description": "array of Files",
+      "items": {
+        "$ref": "#/definitions/File"
+      }
+    },
+    "File": {
+      "type": "string",
+      "description": "## An URL of a file",
+      "example": "https://storage.googleapis.com/martin-blanco/pictures/2017/01/25/2.jpeg"
+    },
+    "ErrorMessage": {
+      "type": "object",
+      "description": "Error message",
+      "properties": {
+        "message": {
+          "type": "string"
+        }
+      }
+    },
+    "Api": {
+      "type": "object",
+      "description": "Open API Schema documentation📡",
+      "properties": {
+        "name": {
+          "type": "string",
+          "example": "Martin Blanco API"
+        },
+        "schemaUrl": {
+          "type": "string",
+          "example": "https://documenter.getpostman.com/view/61112/SzKZsbGy"
+        }
+      }
+    }
+  },
+  "x-components": {
+    "parameters": {
+      "year": {
+        "name": "year",
+        "in": "path",
+        "required": true,
+        "description": "## Calendar year starting from 2017",
+        "example": "2017",
+        "type": "number"
+      },
+      "month": {
+        "name": "month",
+        "in": "path",
+        "required": true,
+        "description": "## Month number in gregorian calendar year",
+        "example": "1",
+        "type": "number"
+      },
+      "day": {
+        "name": "day",
+        "in": "path",
+        "required": true,
+        "description": "## Day number in a month in a gregorian calendar year",
+        "example": "22",
+        "type": "number"
+      },
+      "id": {
+        "name": "id",
+        "in": "path",
+        "required": true,
+        "description": "## Number of picture in a day",
+        "example": "1",
+        "type": "number"
+      }
+    }
+  }
+}
