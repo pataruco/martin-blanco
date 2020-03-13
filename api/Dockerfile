@@ -7,19 +7,13 @@ WORKDIR /opt/app
 
 COPY package.json .
 
-COPY tsconfig.json .
+COPY tsconfig-cloud-run.json .
 
 COPY src ./src
 
-RUN ls -la
-
 RUN yarn --frozen-lockfile --silent --production=false
 
-RUN ls -lah
-
-RUN pwd
-
-RUN yarn tsc .
+RUN yarn tsc --build ./tsconfig-cloud-run.json 
 
 CMD ["yarn", "start"]
 

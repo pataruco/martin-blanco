@@ -34,7 +34,8 @@
     "deploy:prod": "bash ./scripts/deploy-prod.sh",
     "dev": "yarn nodemon ./src/index.ts",
     "importer": "yarn ts-node ./src/importer/index.ts",
-    "open-api": "open https://documenter.getpostman.com/view/61112/SzRw3X7n?version=latest"
+    "open-api": "open https://documenter.getpostman.com/view/61112/SzRw3X7n?version=latest",
+    "start": "node ./src/index.js"
   },
   "version": "1.0.0"
 }
