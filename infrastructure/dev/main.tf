@@ -38,4 +38,3 @@ module "cloud-run" {
   service_name = local.service_name
 }
 
-# locations/europe-west1/namespaces/martin-blanco-api-dev/services/martin-blanco-api
