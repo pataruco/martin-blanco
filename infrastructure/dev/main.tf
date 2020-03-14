@@ -13,10 +13,12 @@ terraform {
 
 
 locals {
+  bucket_name  = "martin-blanco"
   dist_path    = "${path.root}/../../dist/"
+  location     = "europe-west2"
   project      = "martin-blanco-api-dev"
   zip_filename = "api.zip"
-  bucket_name  = "martin-blanco"
+  service_name = "martin-blanco-api"
 }
 
 module "cloud-function" {
@@ -26,3 +28,14 @@ module "cloud-function" {
   source       = "../modules/cloud-function"
   zip_filename = local.zip_filename
 }
+
+module "cloud-run" {
+  project      = local.project
+  source       = "../modules/cloud-run"
+  location     = local.location
+  image        = "gcr.io/${local.project}/${local.service_name}"
+  bucket_name  = local.bucket_name
+  service_name = local.service_name
+}
+
+# locations/europe-west1/namespaces/martin-blanco-api-dev/services/martin-blanco-api
