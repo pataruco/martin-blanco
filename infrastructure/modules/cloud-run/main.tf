@@ -3,13 +3,6 @@ resource "google_cloud_run_service" "martin_blanco_api" {
   location = "europe-west1"
   project  = var.project
 
-  # name    = "martin-blanco-api"
-  # project = "martin-blanco-api-dev"
-
-  metadata {
-    namespace = var.project
-  }
-
   template {
     spec {
       containers {
