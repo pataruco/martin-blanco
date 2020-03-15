@@ -1,4 +1,5 @@
 name: CI Dev
+
 on:
   push:
     branches:
@@ -7,48 +8,45 @@ on:
     paths:
       - 'api/*'
       - '!infrastructure/*'
-      - '!shared/*'
       - '!upload-cli/*'
+
+# Environment variables available to all jobs and steps in this workflow
+env:
+  PROJECT_ID: martin-blanco-api-dev
+  RUN_REGION: europe-west1
+  SERVICE_NAME: martin-blanco-api
+  BUCKET_NAME: martin-blanco
+
 jobs:
-  build:
+  setup-build-deploy:
+    name: Setup, Build, and Deploy
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node: ['10']
-    name: Installing node
+
     steps:
-      - uses: actions/checkout@v2
-      - name: Setup node
-        uses: actions/setup-node@v1
-        with:
-          node-version: 10.16.2
-      - run: |
-          cd api
-          yarn && yarn build
-        shell: bash
-      - name: Upload Artifact
-        uses: actions/upload-artifact@v1
-        with:
-          name: api
-          path: ./api/dist/
-  deploy:
-    runs-on: ubuntu-latest
-    name: Logging into GCP
-    needs:
-      - build
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/download-artifact@v1
-        name: Download Artifact
-        with:
-          name: api
+      - name: Checkout
+        uses: actions/checkout@v1
+
+      # Setup gcloud CLI
       - uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
         with:
           service_account_email: ${{ secrets.GCP_SA_EMAIL }}
-          service_account_key: ${{ secrets.GCP_SA_KEY }}
-      - run: |
-          cd api
-          yarn deploy:dev
-        shell: bash
-        env:
-          BUCKET_NAME: ${{ secrets.BUCKET_NAME }}
+          service_account_key: ${{ secrets.GCP_SA_KEY}}
+
+      # Configure gcloud CLI
+      - name: gcloud Set up
+        run: |
+          gcloud config set project $PROJECT_ID
+
+      # Build and push image to Google Container Registry
+      - name: Build
+        run: |
+          gcloud builds submit ./api -t gcr.io/$PROJECT_ID/$SERVICE_NAME:$GITHUB_SHA
+
+      # Deploy image to Cloud Run
+      - name: Deploy
+        run: |
+          gcloud run deploy $SERVICE_NAME \
+            --region $RUN_REGION \
+            --image gcr.io/$PROJECT_ID/$SERVICE_NAME:$GITHUB_SHA \
+            --set-env-vars BUCKET_NAME=${BUCKET_NAME} \
+            --platform managed
