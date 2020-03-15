@@ -30,11 +30,12 @@ module "cloud-function" {
 }
 
 module "cloud-run" {
-  project      = local.project
-  source       = "../modules/cloud-run"
-  location     = local.location
-  image        = "gcr.io/${local.project}/${local.service_name}"
   bucket_name  = local.bucket_name
+  digest       = var.DIGEST
+  image        = "gcr.io/${local.project}/${local.service_name}"
+  location     = local.location
+  project      = local.project
   service_name = local.service_name
+  source       = "../modules/cloud-run"
 }
 
