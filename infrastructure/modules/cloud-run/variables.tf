@@ -4,7 +4,6 @@ variable "image" {
 
 variable "digest" {
   description = "The docker image digest to deploy."
-  default     = "latest"
 }
 
 variable "project" {
@@ -21,5 +20,4 @@ variable "location" {
 
 variable "service_name" {
   description = "Cloud Run service name"
-
 }

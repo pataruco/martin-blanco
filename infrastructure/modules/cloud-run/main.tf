@@ -6,8 +6,7 @@ resource "google_cloud_run_service" "martin_blanco_api" {
   template {
     spec {
       containers {
-        image = var.image
-        # image = "${var.image}@${var.digest}"
+        image = "${var.image}@${var.digest}"
         env {
           name  = "BUCKET_NAME"
           value = var.bucket_name
