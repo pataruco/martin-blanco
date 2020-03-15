@@ -14,10 +14,6 @@ variable "bucket_name" {
   description = "Storage bucket name"
 }
 
-variable "location" {
-  description = "Project location"
-}
-
 variable "service_name" {
   description = "Cloud Run service name"
 }
