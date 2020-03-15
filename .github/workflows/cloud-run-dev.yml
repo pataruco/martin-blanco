@@ -41,7 +41,7 @@ jobs:
       # Build and push image to Google Container Registry
       - name: Build
         run: |
-          gcloud builds submit -t gcr.io/$PROJECT_ID/$SERVICE_NAME:$GITHUB_SHA
+          gcloud builds submit ./api -t gcr.io/$PROJECT_ID/$SERVICE_NAME:$GITHUB_SHA
 
       # Deploy image to Cloud Run
       - name: Deploy
@@ -49,5 +49,5 @@ jobs:
           gcloud run deploy $SERVICE_NAME \
             --region $RUN_REGION \
             --image gcr.io/$PROJECT_ID/$SERVICE_NAME:$GITHUB_SHA \
-            --set-env-vars BUCKET_NAME=${BUCKET_NAME}
+            --set-env-vars BUCKET_NAME=${BUCKET_NAME} \
             --platform managed
