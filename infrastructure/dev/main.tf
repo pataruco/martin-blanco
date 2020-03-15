@@ -33,7 +33,6 @@ module "cloud-run" {
   bucket_name  = local.bucket_name
   digest       = var.DIGEST
   image        = "gcr.io/${local.project}/${local.service_name}"
-  location     = local.location
   project      = local.project
   service_name = local.service_name
   source       = "../modules/cloud-run"

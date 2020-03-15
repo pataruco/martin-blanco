@@ -1,6 +1,6 @@
 resource "google_cloud_run_service" "martin_blanco_api" {
   name     = var.service_name
-  location = "europe-west1"
+  location = "europe-west1" # It is different from main location because on europe-west2 Cloud Run is no available
   project  = var.project
 
   template {
