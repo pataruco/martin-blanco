@@ -6,7 +6,7 @@ provider "google-beta" {
 
 terraform {
   backend "gcs" {
-    bucket = "martin-blanco-dev"
+    bucket = "martin-blanco-prod"
     prefix = "terraform/state"
   }
 }
