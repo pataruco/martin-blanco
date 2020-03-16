@@ -11,13 +11,9 @@ terraform {
   }
 }
 
-
 locals {
   bucket_name  = "martin-blanco"
-  dist_path    = "${path.root}/../../dist/"
-  location     = "europe-west2"
   project      = "martin-blanco-api-dev"
-  zip_filename = "api.zip"
   service_name = "martin-blanco-api"
 }
 
