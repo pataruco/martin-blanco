@@ -21,12 +21,10 @@ locals {
   service_name = "martin-blanco-api"
 }
 
-module "cloud-function" {
-  bucket_name  = local.bucket_name
-  dist_path    = local.dist_path
-  project      = local.project
-  source       = "../modules/cloud-function"
-  zip_filename = local.zip_filename
+module "storage" {
+  bucket_name = local.bucket_name
+  project     = local.project
+  source      = "../modules/storage"
 }
 
 module "cloud-run" {
