@@ -27,7 +27,7 @@
     },
     "/pictures/date/{year}": {
       "get": {
-        "tags": ["Pictures"],
+        "tags": ["Pictures 📷"],
         "description": "Year",
         "parameters": [
           {
@@ -70,7 +70,7 @@
     },
     "/pictures/date/{year}/{month}": {
       "get": {
-        "tags": ["Pictures"],
+        "tags": ["Pictures 📷"],
         "description": "Year/Month",
         "parameters": [
           {
@@ -116,7 +116,7 @@
     },
     "/pictures/date/{year}/{month}/{day}": {
       "get": {
-        "tags": ["Pictures"],
+        "tags": ["Pictures 📷"],
         "description": "Year/Month/Day",
         "parameters": [
           {
@@ -165,7 +165,7 @@
     },
     "/pictures/date/{year}/{month}/{day}/{id}": {
       "get": {
-        "tags": ["Pictures"],
+        "tags": ["Pictures 📷"],
         "description": "Year/Month/Day",
         "parameters": [
           {
@@ -219,7 +219,7 @@
     },
     "/pictures/random": {
       "get": {
-        "tags": ["Pictures"],
+        "tags": ["Pictures 📷"],
         "description": "Random",
         "responses": {
           "200": {
@@ -260,11 +260,11 @@
   },
   "servers": [
     {
-      "url": "https://europe-west2-martin-blanco-api-dev.cloudfunctions.net/martin-blanco-api/",
+      "url": "https://dev.martin-blanco.com",
       "description": "# Dev environment"
     },
     {
-      "url": "https://europe-west2-martin-blanco-api-prod.cloudfunctions.net/martin-blanco-api/",
+      "url": "https://api.martin-blanco.com",
       "description": "# Prod environment"
     }
   ],
