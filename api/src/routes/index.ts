@@ -2,20 +2,16 @@
 import express, { Request, Response } from 'express';
 import healthRouter from './health';
 import picturesRouter from './pictures';
+import swaggerUi from 'swagger-ui-express';
+import openAPiSchema from '../open-api/open-api-schema.json';
 
 const routes = express.Router();
 
-const baseRoute = async (_req: Request, res: Response) => {
-  res.json({
-    name: 'Martin Blanco API',
-    schemaUrl: 'https://documenter.getpostman.com/view/61112/SzKZsbGy',
-  });
-};
-
 // routes
+routes.use(swaggerUi.serve);
 routes.use(healthRouter);
 routes.use(picturesRouter);
 
 // Serves open api doc on root
-routes.route('/').get(baseRoute);
+routes.route('/').get(swaggerUi.setup(openAPiSchema));
 export default routes;
