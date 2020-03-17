@@ -31,9 +31,6 @@
   "name": "api",
   "main": "dist/index.js",
   "scripts": {
-    "build": "bash ./scripts/compile.sh",
-    "deploy:dev": "bash ./scripts/deploy-dev.sh",
-    "deploy:prod": "bash ./scripts/deploy-prod.sh",
     "dev": "yarn nodemon ./src/index.ts",
     "importer": "yarn ts-node ./src/importer/index.ts",
     "open-api": "open https://documenter.getpostman.com/view/61112/SzRw3X7n?version=latest",
