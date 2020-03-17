@@ -37,3 +37,18 @@ resource "google_cloud_run_service_iam_policy" "noauth" {
 
   policy_data = data.google_iam_policy.noauth.policy_data
 }
+
+
+resource "google_cloud_run_domain_mapping" "custom_domain" {
+  location = google_cloud_run_service.martin_blanco_api.location
+  name     = "dev.martin-blanco.com"
+  project  = var.project
+
+  metadata {
+    namespace = var.project
+  }
+
+  spec {
+    route_name = google_cloud_run_service.martin_blanco_api.name
+  }
+}
