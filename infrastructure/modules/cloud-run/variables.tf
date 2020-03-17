@@ -17,3 +17,7 @@ variable "bucket_name" {
 variable "service_name" {
   description = "Cloud Run service name"
 }
+
+variable "custom_domain_name" {
+  description = "Cloud Run custom domain"
+}
