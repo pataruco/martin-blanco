@@ -1,5 +1,5 @@
 // eslint-disable-next-line no-unused-vars
-import express, { Request, Response } from 'express';
+import express from 'express';
 import healthRouter from './health';
 import picturesRouter from './pictures';
 import swaggerUi from 'swagger-ui-express';
