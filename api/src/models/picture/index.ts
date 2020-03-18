@@ -65,9 +65,19 @@ export const getFileById = async (
   const { year, month, day, id } = query;
 
   if (year && month && day && id) {
-    return await storage
-      .bucket(`${BUCKET_NAME}`)
-      .file(`pictures/${year}/${month}/${day}/${id}.jpeg`);
+    const filesbyDate = await getFilesBy({ year, month, day });
+
+    const [filename] = filesbyDate.filter(fileByDate =>
+      fileByDate.includes(
+        `https://storage.googleapis.com/${BUCKET_NAME}/pictures/${year}/${month}/${day}/${id}`,
+      ),
+    );
+
+    const filepath = filename.split(`${BUCKET_NAME}/`).pop();
+
+    return filepath
+      ? storage.bucket(`${BUCKET_NAME}`).file(filepath)
+      : undefined;
   }
 };
 
