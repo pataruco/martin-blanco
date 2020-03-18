@@ -9,18 +9,20 @@
 
 Tools for my family API written on TypeScript.
 
-Dependecies are managed by [Yarn workspaces](https://classic.yarnpkg.com/en/docs/workspaces/) and [Lerna](https://github.com/lerna/lerna)
-
-Infrastructure is provioned by [Terraform](https://www.terraform.io/), [here](./infrastructure) is the code.
-
 This monorepo is divided in two main packages:
 
-- [API](./api/readme.md): is a Node/Express server container running on Google Cloud Run, you can find the schema [here](https://api.martin-blanco.com)
-- [CLI](./upload-cli/readme.md): is a tool to resize, rotate images and upload them to a Google Storage bucket
+- [API](./api/readme.md): is a Node/Express server container running on Google Cloud Run, you can find the schema [here](https://api.martin-blanco.com).
+- [CLI](./upload-cli/readme.md): is a tool to resize, rotate images and upload them to a Google Storage bucket.
+
+Dependecies are managed by [Yarn workspaces](https://classic.yarnpkg.com/en/docs/workspaces/) and [Lerna](https://github.com/lerna/lerna),
+
+Infrastructure is provioned by [Terraform](https://www.terraform.io/).
+
+CI/CD using [GitHub Actions](https://help.github.com/en/actions) :octocat:.
 
 ## Installation
 
-1. git clone this repo
+1. clone this repo
 
    ```sh
    git clone git@github.com:pataruco/martin-blanco.git
