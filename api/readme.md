@@ -1,20 +1,60 @@
 # API 📡
 
-![](http://validator.swagger.io/validator?url=https://raw.githubusercontent.com/pataruco/martin-blanco/master/api/src/open-api/open-api-schema.json)
+Open API Schema ![](http://validator.swagger.io/validator?url=https://raw.githubusercontent.com/pataruco/martin-blanco/master/api/src/open-api/open-api-schema.json)
 
 [![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/8f4d16a4b130529776a8)
 
-## To do
+## Installation
 
-- [x] Create terraform models for cloud functions
-- [x] Create production environment
-- [x] Deploy production when release tag is created GitHub action
-- [x] Create swagger file
-- [x] Render swagger file en root
-- [x] Move files to develop environment
-- [x] Create an util for get files
-- [x] Workout roots
-- [x] Refactor swagger file
-- [x] Create an upload endpoint
-- [x] Enable winston to log to StackDriver
-- [ ] Create URLs for development and production
+1. Get into the `api` directory
+
+   ```sh
+   cd api
+   ```
+
+2. Install dependencies
+
+   ```sh
+   yarn
+   ```
+
+3. Create a [Google Cloud service account key](https://cloud.google.com/docs/authentication/getting-started#creating_a_service_account) for dev enviroment
+
+   ```sh
+   gcloud iam service-accounts keys create [FILE_NAME].json --iam-account [NAME]@[martin-blanco-api-dev.iam.gserviceaccount.com
+   ```
+
+4. Create an `.env` file and set values from `.env.example`
+
+   ```sh
+   touch .env
+   cat .env.example | >> env1
+   ```
+
+## Run
+
+### Local
+
+To spin a local server type
+
+```sh
+yarn dev
+```
+
+## Build
+
+### Local
+
+To build and deploy into dev environment Cloud Run type:
+
+```sh
+sh ./scripts/cloud-run-build-deploy.sh
+```
+
+or commit your changes in a branch and push to remote branch and GitHub Actions will deploy it :octocat: :rocket:
+
+You can see your change on dev environment here: [https://dev.martin-blanco.com](https://dev.martin-blanco.com)
+
+## Tests
+
+TODO 🧪🏗
