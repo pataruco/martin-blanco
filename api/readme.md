@@ -1,6 +1,7 @@
 # API 📡
 
-Open API Schema ![](http://validator.swagger.io/validator?url=https://raw.githubusercontent.com/pataruco/martin-blanco/master/api/src/open-api/open-api-schema.json)
+Open API Schema Valid
+![](http://validator.swagger.io/validator?url=https://raw.githubusercontent.com/pataruco/martin-blanco/master/api/src/open-api/open-api-schema.json)
 
 [![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/8f4d16a4b130529776a8)
 
@@ -28,7 +29,7 @@ Open API Schema ![](http://validator.swagger.io/validator?url=https://raw.github
 
    ```sh
    touch .env
-   cat .env.example | >> env1
+   cat .env.example | >> env
    ```
 
 ## Run
@@ -45,7 +46,7 @@ yarn dev
 
 ### Local
 
-To build and deploy into dev environment Cloud Run type:
+To build and deploy into Cloud Run dev environment type:
 
 ```sh
 sh ./scripts/cloud-run-build-deploy.sh

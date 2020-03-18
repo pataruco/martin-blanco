@@ -7,12 +7,12 @@
 
 ## What is it?
 
-Tools for my family API written on TypeScript.
+Tools for my family API written in TypeScript.
 
 This monorepo is divided in two main packages:
 
-- [API](./api/readme.md): is a Node/Express server container running on Google Cloud Run, you can find the schema [here](https://api.martin-blanco.com).
-- [CLI](./upload-cli/readme.md): is a tool to resize, rotate images and upload them to a Google Storage bucket.
+- [API](./api): is a Node/Express server container running on Google Cloud Run, you can find the schema [here](https://api.martin-blanco.com).
+- [CLI](./upload-cli): is a tool to resize, rotate images and upload them to a Google Storage bucket.
 
 Dependecies are managed by [Yarn workspaces](https://classic.yarnpkg.com/en/docs/workspaces/) and [Lerna](https://github.com/lerna/lerna),
 
