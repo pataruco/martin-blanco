@@ -1,5 +1,14 @@
 # API 📡
 
+## What is it?
+
+Is an API to serve pictures of my family.
+
+As part of my roadmap is to extend this to:
+
+- Serve movies
+- Do my main groceries using my supermarket API
+
 Open API Schema Valid
 ![](http://validator.swagger.io/validator?url=https://raw.githubusercontent.com/pataruco/martin-blanco/master/api/src/open-api/open-api-schema.json)
 
@@ -29,7 +38,7 @@ Open API Schema Valid
 
    ```sh
    touch .env
-   cat .env.example | >> env
+   cat .env.example | >> .env
    ```
 
 ## Run

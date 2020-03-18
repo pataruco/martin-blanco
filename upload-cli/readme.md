@@ -24,6 +24,13 @@ for them to be serve using the [API](../api)
    yarn
    ```
 
+3. Create an `.env` file and set values from `.env.example`
+
+   ```sh
+   touch .env
+   cat .env.example | >> .env
+   ```
+
 # Run
 
 To upload files type
