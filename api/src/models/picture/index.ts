@@ -94,7 +94,9 @@ export const getRandomFile = async (): Promise<File> => {
   return allPictures[randomIndex];
 };
 
-const getOriginalTime = async (buffer: Buffer): Promise<OriginalTime> => {
+export const getOriginalTime = async (
+  buffer: Buffer,
+): Promise<OriginalTime> => {
   const data = await ExifParserFactory.create(buffer).parse();
   const originalTime =
     data.tags?.DateTimeOriginal ?? new Date(0).getUTCSeconds();
@@ -112,7 +114,7 @@ const getRotatedAndResizeBuffer = async (buffer: Buffer): Promise<Buffer> =>
     .resize(800)
     .toBuffer();
 
-const getNumberString = (number: number): string =>
+export const getNumberString = (number: number): string =>
   number < 10 ? String(`0${number}`) : String(number);
 
 const getFileName = async (bufferToUpload: BufferToupload): Promise<string> => {
