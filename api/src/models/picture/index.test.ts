@@ -1,9 +1,18 @@
-import { getDirectory } from './';
+// eslint-disable-next-line no-unused-vars
+import { getDirectory, Time } from './';
 
 describe(getDirectory, () => {
-  it('return a directory string', () => {
-    const year = '2017';
-    const directory = getDirectory({ year });
-    expect(directory).toBe(`pictures/${year}`);
+  const year = '2017';
+  const month = '01';
+  const day = '02';
+
+  const directories: Array<Array<Time | string>> = [
+    [{ year }, `pictures/${year}`],
+    [{ year, month }, `pictures/${year}/${month}`],
+    [{ year, month, day }, `pictures/${year}/${month}/${day}`],
+  ];
+
+  it.each(directories)('getDirectory(%o)', (query: Time, directory: string) => {
+    expect(getDirectory(query)).toBe(directory);
   });
 });
