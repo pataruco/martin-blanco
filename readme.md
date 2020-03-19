@@ -2,6 +2,7 @@
 
 ![CI Prod](https://github.com/pataruco/martin-blanco/workflows/CI%20Prod/badge.svg)
 ![CI Dev](https://github.com/pataruco/martin-blanco/workflows/CI%20Dev/badge.svg)
+![](https://api.dependabot.com/badges/status?host=github&repo=pataruco/martin-blanco)
 
 [![lerna](https://img.shields.io/badge/maintained%20with-lerna-cc00ff.svg)](https://lerna.js.org/)[![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
 
