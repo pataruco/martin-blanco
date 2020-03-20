@@ -22,3 +22,5 @@ if (!module.parent) {
     logger.info(`server.listening ${JSON.stringify({ HOST, PORT })}`),
   );
 }
+
+export default app;
