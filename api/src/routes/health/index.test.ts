@@ -30,11 +30,14 @@ describe('/health', () => {
       .get('/health')
       .reply(200, 'OK');
 
+    const healthRouterSPy = jest.spyOn(healthRouter, 'get');
+
     const response = await fetch(`${baseUri}/health`);
 
     const text = await response.text();
 
     expect(text).toBe('OK');
     expect(response.status).toBe(200);
+    await expect(healthRouterSPy).toBeCalled();
   });
 });
