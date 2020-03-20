@@ -3,8 +3,8 @@ import express, { Request, Response } from 'express';
 
 const healthRouter = express.Router();
 
-healthRouter.get('/health', async (req: Request, res: Response) => {
-  res.send('OK');
-});
+export const getHealth = async (_req: Request, res: Response) => res.send('OK');
+
+healthRouter.get('/health', getHealth);
 
 export default healthRouter;
