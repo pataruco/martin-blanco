@@ -79,6 +79,7 @@ const getPicturesByMonth = async (
     }
     return res.status(404).json({
       year,
+      month,
       message: 'Files not found',
     });
   } catch (error) {
