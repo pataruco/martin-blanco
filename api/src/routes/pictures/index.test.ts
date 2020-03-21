@@ -19,9 +19,16 @@ const getFilesByThrowError = () =>
 const getFilesByReturnsFiles = () =>
   jest.spyOn(picture, 'getFilesBy').mockResolvedValueOnce(files);
 
+const getFilesByIdReturnsEmpty = () =>
+  jest.spyOn(picture, 'getFileById').mockResolvedValueOnce(undefined);
+
+const getFilesByIdThrowError = () =>
+  jest.spyOn(picture, 'getFileById').mockRejectedValueOnce(new Error('💥'));
+
 const year = '2018';
 const month = '01';
 const day = '10';
+const id = '1';
 
 describe('/pictures', () => {
   describe('GET /pictures/date/:year', () => {
@@ -177,6 +184,59 @@ describe('/pictures', () => {
         day,
         files,
       });
+    });
+  });
+
+  describe('GET /pictures/date/:year/:month/:day/:id', () => {
+    const badRequests = [
+      ['test', '"id" must be a number'],
+      ['0', '"id" must be greater than 0'],
+    ];
+
+    it.each(badRequests)(
+      'returns 422 with message when requests fail validation (/pictures/date/year/month/day%s) ❌',
+      async (reqParam: string, message: string) => {
+        const response = await request(app).get(
+          `/pictures/date/${year}/${month}/${day}/${reqParam}`,
+        );
+        expect(response.status).toBe(422);
+        expect(response.body).toEqual({ message });
+      },
+    );
+
+    it('returns 404 when file are not found ❌', async () => {
+      getFilesByIdReturnsEmpty();
+      const response = await request(app).get(
+        `/pictures/date/${year}/${month}/${day}/${id}`,
+      );
+      expect(response.status).toBe(404);
+      expect(response.body).toEqual({
+        message: 'File not found',
+        year,
+        month,
+        day,
+        id,
+      });
+    });
+
+    it('returns 500 when getFilesBy throw an error ❌', async () => {
+      getFilesByIdThrowError();
+      const response = await request(app).get(
+        `/pictures/date/${year}/${month}/${day}/${id}`,
+      );
+      expect(response.status).toBe(500);
+      expect(response.body).toEqual({
+        message: 'Error getPictureById, Error: Error: 💥',
+      });
+    });
+
+    it('returns 200 with a file ✅', async () => {
+      getFilesByReturnsFiles();
+      const response = await request(app).get(
+        `/pictures/date/${year}/${month}/${day}/${id}`,
+      );
+      expect(response.status).toBe(200);
+      expect(response.header['content-type']).toBe('image/jpeg');
     });
   });
 });

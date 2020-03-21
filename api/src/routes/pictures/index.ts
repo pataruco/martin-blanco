@@ -164,6 +164,10 @@ const getPictureById = async (
       return res.send(downdloadedFile);
     } else {
       return res.status(404).json({
+        year,
+        month,
+        day,
+        id,
         message: 'File not found',
       });
     }
