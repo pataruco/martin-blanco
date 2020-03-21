@@ -24,6 +24,9 @@ const getFilesByThrowError = () =>
 const getFilesByReturnsFiles = () =>
   jest.spyOn(picture, 'getFilesBy').mockResolvedValueOnce(files);
 
+const year = '2018';
+const month = '01';
+
 describe('/pictures', () => {
   describe('GET /pictures/date/:year', () => {
     const badRequests = [
@@ -59,11 +62,66 @@ describe('/pictures', () => {
 
     it('returns 200 with a list of files ✅', async () => {
       getFilesByReturnsFiles();
-      const year = '2020';
       const response = await request(app).get(`/pictures/date/${year}`);
       expect(response.status).toBe(200);
       expect(response.body).toEqual({
         year,
+        files,
+      });
+    });
+  });
+
+  describe('GET /pictures/date/:year/:month', () => {
+    const badRequests = [
+      ['test', '"month" must be a number'],
+      ['0', '"month" must be greater than 0'],
+      ['13', '"month" must be less than 13'],
+    ];
+    it.each(badRequests)(
+      'returns 422 with message when requests fail validation (/pictures/date/year/%s) ❌',
+      async (reqParam: string, message: string) => {
+        const response = await request(app).get(
+          `/pictures/date/2017/${reqParam}`,
+        );
+        expect(response.status).toBe(422);
+        expect(response.body).toEqual({ message });
+      },
+    );
+
+    it('returns 404 when files are not found ❌', async () => {
+      getFilesByReturnsEmpty();
+      const response = await request(app).get(
+        `/pictures/date/${year}/${month}`,
+      );
+      expect(response.status).toBe(404);
+      expect(response.body).toEqual({
+        message: 'Files not found',
+        year,
+        month,
+      });
+    });
+
+    it('returns 500 when getFilesBy throw an error ❌', async () => {
+      getFilesByThrowError();
+      const year = '2020';
+      const response = await request(app).get(
+        `/pictures/date/${year}/${month}`,
+      );
+      expect(response.status).toBe(500);
+      expect(response.body).toEqual({
+        message: 'Error getPicturesByMonth, Error: Error: 💥',
+      });
+    });
+
+    it('returns 200 with a list of files ✅', async () => {
+      getFilesByReturnsFiles();
+      const response = await request(app).get(
+        `/pictures/date/${year}/${month}`,
+      );
+      expect(response.status).toBe(200);
+      expect(response.body).toEqual({
+        year,
+        month,
         files,
       });
     });
