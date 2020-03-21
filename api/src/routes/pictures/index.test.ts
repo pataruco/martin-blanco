@@ -25,6 +25,12 @@ const getFilesByIdReturnsEmpty = () =>
 const getFilesByIdThrowError = () =>
   jest.spyOn(picture, 'getFileById').mockRejectedValueOnce(new Error('💥'));
 
+const getRansdomFileReturnsEmpty = () =>
+  jest.spyOn(picture, 'getRandomFile').mockResolvedValueOnce(undefined);
+
+const getRansdomFilehrowError = () =>
+  jest.spyOn(picture, 'getRandomFile').mockRejectedValueOnce(new Error('💥'));
+
 const year = '2018';
 const month = '01';
 const day = '10';
@@ -204,7 +210,7 @@ describe('/pictures', () => {
       },
     );
 
-    it('returns 404 when file are not found ❌', async () => {
+    it('returns 404 when file is not found ❌', async () => {
       getFilesByIdReturnsEmpty();
       const response = await request(app).get(
         `/pictures/date/${year}/${month}/${day}/${id}`,
@@ -219,7 +225,7 @@ describe('/pictures', () => {
       });
     });
 
-    it('returns 500 when getFilesBy throw an error ❌', async () => {
+    it('returns 500 when getFileById throw an error ❌', async () => {
       getFilesByIdThrowError();
       const response = await request(app).get(
         `/pictures/date/${year}/${month}/${day}/${id}`,
@@ -231,10 +237,36 @@ describe('/pictures', () => {
     });
 
     it('returns 200 with a file ✅', async () => {
-      getFilesByReturnsFiles();
       const response = await request(app).get(
         `/pictures/date/${year}/${month}/${day}/${id}`,
       );
+      expect(response.status).toBe(200);
+      expect(response.header['content-type']).toBe('image/jpeg');
+    });
+  });
+
+  describe('GET /pictures/random', () => {
+    it('returns 404 when file is not found ❌', async () => {
+      getRansdomFileReturnsEmpty();
+      const response = await request(app).get(`/pictures/random`);
+      expect(response.status).toBe(404);
+      expect(response.body).toEqual({
+        message: 'File not found',
+      });
+    });
+
+    it('returns 500 when getRandomFile throw an error ❌', async () => {
+      getRansdomFilehrowError();
+      const response = await request(app).get(`/pictures/random`);
+      expect(response.status).toBe(500);
+      expect(response.body).toEqual({
+        message: 'Error getRandomPicture, Error: Error: 💥',
+      });
+    });
+
+    it('returns 200 with a file ✅', async () => {
+      getFilesByReturnsFiles();
+      const response = await request(app).get(`/pictures/random`);
       expect(response.status).toBe(200);
       expect(response.header['content-type']).toBe('image/jpeg');
     });
