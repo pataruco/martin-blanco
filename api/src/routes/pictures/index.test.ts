@@ -5,11 +5,6 @@ import * as picture from '../../models/picture';
 jest.mock('../../utils/logger');
 
 const files = [
-  'https://storage.googleapis.com/martin-blanco/pictures/2018/01/01/1.jpg',
-  'https://storage.googleapis.com/martin-blanco/pictures/2018/01/04/1.jpg',
-  'https://storage.googleapis.com/martin-blanco/pictures/2018/01/05/1.jpg',
-  'https://storage.googleapis.com/martin-blanco/pictures/2018/01/06/1.jpg',
-  'https://storage.googleapis.com/martin-blanco/pictures/2018/01/08/1.jpg',
   'https://storage.googleapis.com/martin-blanco/pictures/2018/01/10/1.jpg',
   'https://storage.googleapis.com/martin-blanco/pictures/2018/01/10/2.jpg',
   'https://storage.googleapis.com/martin-blanco/pictures/2018/01/10/3.jpg',
@@ -26,6 +21,7 @@ const getFilesByReturnsFiles = () =>
 
 const year = '2018';
 const month = '01';
+const day = '10';
 
 describe('/pictures', () => {
   describe('GET /pictures/date/:year', () => {
@@ -81,7 +77,7 @@ describe('/pictures', () => {
       'returns 422 with message when requests fail validation (/pictures/date/year/%s) ❌',
       async (reqParam: string, message: string) => {
         const response = await request(app).get(
-          `/pictures/date/2017/${reqParam}`,
+          `/pictures/date/${year}/${reqParam}`,
         );
         expect(response.status).toBe(422);
         expect(response.body).toEqual({ message });
@@ -103,7 +99,6 @@ describe('/pictures', () => {
 
     it('returns 500 when getFilesBy throw an error ❌', async () => {
       getFilesByThrowError();
-      const year = '2020';
       const response = await request(app).get(
         `/pictures/date/${year}/${month}`,
       );
@@ -122,6 +117,64 @@ describe('/pictures', () => {
       expect(response.body).toEqual({
         year,
         month,
+        files,
+      });
+    });
+  });
+
+  describe('GET /pictures/date/:year/:month/:day', () => {
+    const badRequests = [
+      ['test', '"day" must be a number'],
+      ['0', '"day" must be greater than 0'],
+      ['40', '"day" must be less than 32'],
+    ];
+
+    it.each(badRequests)(
+      'returns 422 with message when requests fail validation (/pictures/date/year/month/%s) ❌',
+      async (reqParam: string, message: string) => {
+        const response = await request(app).get(
+          `/pictures/date/${year}/${month}/${reqParam}`,
+        );
+        expect(response.status).toBe(422);
+        expect(response.body).toEqual({ message });
+      },
+    );
+
+    it('returns 404 when files are not found ❌', async () => {
+      getFilesByReturnsEmpty();
+      const response = await request(app).get(
+        `/pictures/date/${year}/${month}/${day}`,
+      );
+      expect(response.status).toBe(404);
+      expect(response.body).toEqual({
+        message: 'Files not found',
+        year,
+        month,
+        day,
+      });
+    });
+
+    it('returns 500 when getFilesBy throw an error ❌', async () => {
+      getFilesByThrowError();
+      const response = await request(app).get(
+        `/pictures/date/${year}/${month}/${day}`,
+      );
+      expect(response.status).toBe(500);
+      expect(response.body).toEqual({
+        message: 'Error getPicturesByDay, Error: Error: 💥',
+      });
+    });
+
+    it('returns 200 with a list of files ✅', async () => {
+      getFilesByReturnsFiles();
+      const response = await request(app).get(
+        `/pictures/date/${year}/${month}/${day}`,
+      );
+      expect(response.status).toBe(200);
+      expect(response.body).toEqual({
+        year,
+        month,
+        day,
         files,
       });
     });
