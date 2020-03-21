@@ -35,7 +35,7 @@
     "importer": "yarn ts-node ./src/importer/index.ts",
     "open-api": "open https://documenter.getpostman.com/view/61112/SzRw3X7n?version=latest",
     "start": "node ./src/index.js",
-    "test": "yarn jest"
+    "test": "yarn jest --detectOpenHandles"
   },
   "version": "1.0.0"
 }
