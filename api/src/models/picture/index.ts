@@ -43,11 +43,6 @@ export const getFilesBy = async (query: Time) => {
   );
 };
 
-interface BufferToupload extends OriginalTime {
-  buffer: Buffer;
-  mimetype: string;
-}
-
 interface TimeAndId extends Time {
   id: string;
 }
