@@ -123,6 +123,8 @@ const getPicturesByDay = async (
     }
     return res.status(404).json({
       year,
+      month,
+      day,
       message: 'Files not found',
     });
   } catch (error) {
