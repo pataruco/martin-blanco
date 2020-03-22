@@ -6,6 +6,8 @@ import chalk from 'chalk';
 import dotenv from 'dotenv';
 import path from 'path';
 import sharp from 'sharp';
+// eslint-disable-next-line no-unused-vars
+import { getFilesByPath, getFilePath, OriginalTime } from '../lib/uploader';
 
 dotenv.config();
 
@@ -18,11 +20,11 @@ const {
 } = process.env;
 const DELAY_TIME = 100;
 
-interface OriginalTime {
-  year: number;
-  month: number;
-  day: number;
-}
+// interface OriginalTime {
+//   year: number;
+//   month: number;
+//   day: number;
+// }
 
 interface UploadFilePath extends OriginalTime {
   fileExtension: string;
@@ -61,15 +63,6 @@ export const getFilesBy = async (query: Time) => {
   );
 };
 
-const getFilesByPath = async (path: string): Promise<string[]> => {
-  try {
-    return await fs.readdir(path);
-  } catch (e) {
-    console.error(e);
-    throw Error(`Unable to get files from ${path}. ${e}`);
-  }
-};
-
 const getfile = async (path: string): Promise<Buffer> => {
   try {
     return await fs.readFile(path);
@@ -96,14 +89,6 @@ const getOriginalTime = async (buffer: Buffer): Promise<OriginalTime> => {
     day: date.getDate(),
   };
 };
-
-const getFilePath = ({
-  source,
-  file,
-}: {
-  source: string;
-  file: string;
-}): string => path.resolve(source, file);
 
 const getFileExtension = (filePath: string): string => path.extname(filePath);
 
