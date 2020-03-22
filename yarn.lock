@@ -1644,6 +1644,13 @@
     "@types/express-serve-static-core" "*"
     "@types/mime" "*"
 
+"@types/sharp@^0.24.0":
+  version "0.24.0"
+  resolved "https://registry.yarnpkg.com/@types/sharp/-/sharp-0.24.0.tgz#28abfeac45b4dcb472305503105322e97a6c2672"
+  integrity sha512-+0WeyJajTSoIacBzonsq856whNJC+cN9FNEs0yZ6hFq/V1CZmlqM8vBRy7TKZunH+gIO7SwDCzgXYWRRbzqfDA==
+  dependencies:
+    "@types/node" "*"
+
 "@types/stack-utils@^1.0.1":
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/@types/stack-utils/-/stack-utils-1.0.1.tgz#0a851d3bd96498fa25c33ab7278ed3bd65f06c3e"
@@ -2058,6 +2065,11 @@ async-listener@^0.6.0:
   dependencies:
     semver "^5.3.0"
     shimmer "^1.1.0"
+
+async@>=0.2.9:
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/async/-/async-3.2.0.tgz#b3a2685c5ebb641d3de02d161002c60fc9f85720"
+  integrity sha512-TR2mEZFVOj2pLStYxLht7TyfuRzaydfpxr3k9RpHIzMgw7A64dzsdqCxH1WJyQdoe8T10nDXd9wnEigmiuHIZw==
 
 async@^2.6.1:
   version "2.6.3"
@@ -3944,6 +3956,14 @@ flatted@^2.0.0:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/flatted/-/flatted-2.0.1.tgz#69e57caa8f0eacbc281d2e2cb458d46fdb449e08"
   integrity sha512-a1hQMktqW9Nmqr5aktAux3JMNqaucxGcjtjWnZLHX7yyPCmlSV3M54nGYbqT8K+0GhF3NBgmJCc3ma+WOgX8Jg==
+
+fluent-ffmpeg@^2.1.2:
+  version "2.1.2"
+  resolved "https://registry.yarnpkg.com/fluent-ffmpeg/-/fluent-ffmpeg-2.1.2.tgz#c952de2240f812ebda0aa8006d7776ee2acf7d74"
+  integrity sha1-yVLeIkD4EuvaCqgAbXd27irPfXQ=
+  dependencies:
+    async ">=0.2.9"
+    which "^1.1.1"
 
 flush-write-stream@^1.0.0:
   version "1.1.1"
@@ -8926,6 +8946,11 @@ typedarray@^0.0.6:
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
   integrity sha1-hnrHTjhkGHsdPUfZlqeOxciDB3c=
 
+types@^0.1.1:
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/types/-/types-0.1.1.tgz#860c6859d11366293f835d8c95aebcf95029838e"
+  integrity sha1-hgxoWdETZik/g12Mla68+VApg44=
+
 typescript@^3.7.5, typescript@^3.8.3:
   version "3.8.3"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.8.3.tgz#409eb8544ea0335711205869ec458ab109ee1061"
@@ -9227,7 +9252,7 @@ which-pm-runs@^1.0.0:
   resolved "https://registry.yarnpkg.com/which-pm-runs/-/which-pm-runs-1.0.0.tgz#670b3afbc552e0b55df6b7780ca74615f23ad1cb"
   integrity sha1-Zws6+8VS4LVd9rd4DKdGFfI60cs=
 
-which@^1.2.9, which@^1.3.1:
+which@^1.1.1, which@^1.2.9, which@^1.3.1:
   version "1.3.1"
   resolved "https://registry.yarnpkg.com/which/-/which-1.3.1.tgz#a45043d54f5805316da8d62f9f50918d3da70b0a"
   integrity sha512-HxJdYWq1MTIQbJ3nw0cqssHoTNU267KlrDuGZ1WYlxDStUtKUhOaJmh112/TZmHxxUfuJqPXSOm7tDyas0OSIQ==
