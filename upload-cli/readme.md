@@ -54,3 +54,9 @@ Follow the instructions on prompt:
 ## Tests
 
 TODO 🧪🏗
+
+## Movies
+
+```sh
+brew install ffmpeg
+```
