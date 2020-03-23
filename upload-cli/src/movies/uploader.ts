@@ -41,13 +41,17 @@ const getTranscodedBuffer = async (filePath: string): Promise<Writable> =>
   new Promise((resolve, reject) => {
     console.log('process');
     console.log({ filePath });
-    const stream = fs.createWriteStream('stream');
+    const stream = fs.createWriteStream('webm');
+
+    // ffmpeg -i videoName.mov -vcodec h264 -acodec mp2 videoName.mp4
+    // ffmpeg -i {input}.mov -vcodec h264 -acodec aac -strict -2 {output}.mp4
+    // ffmpeg -i {in-video}.mov -vcodec h264 -acodec aac -strict -2 {out-video}.mp4
 
     ffmpeg(filePath)
       // const process = ffmpeg(filePath)
       .on('start', () => console.log(`🟢 Start Transcoding ${filePath}`))
       .on('progress', progress =>
-        console.log(`🏭 Processing: ${progress.percent}%`),
+        console.log(`🏭 Processing: ${progress.percent} %`),
       )
       .on('error', error => {
         console.error(`💥 Error transcoding file ${filePath}.`, error);
@@ -58,7 +62,20 @@ const getTranscodedBuffer = async (filePath: string): Promise<Writable> =>
         resolve(stream);
       })
       .size('50%')
-      .format('gif')
+      .format('webm')
+      // .videoCodec('libx264') //h264 //libx264
+      // .videoCodec('hevc_videotoolbox')
+      // .getAvailableCodecs(function(err, codecs) {
+      //   console.log('Available codecs:');
+      //   console.dir(codecs); //h264 //libx264 //libx265
+      // });
+      // .getAvailableFormats(function(err, formats) {
+      //   //h264 //mp4
+      //   console.log('Available formats:');
+      //   console.dir(formats);
+      // });
+
+      // .audioCodec('aac')
       .output(stream, { end: true })
       .run();
   });
@@ -79,7 +96,23 @@ const start = async () => {
 
       const rotateAndResizeBuffer = await getTranscodedBuffer(filePath);
 
-      console.log({ rotateAndResizeBuffer });
+      // console.log({ rotateAndResizeBuffer });
+
+      // ffmpeg.getAvailableFormats(function(err, formats) {
+      //   //h264 //mp4
+      //   console.log('Available formats:');
+      //   console.dir(formats);
+      // });
+
+      // ffmpeg.getAvailableCodecs(function(err, codecs) {
+      //   console.log('Available codecs:');
+      //   console.dir(codecs); //h264 //libx264 //libx265
+      // });
+
+      // ffmpeg.getAvailableEncoders(function(err, encoders) {
+      //   console.log('Available encoders:');
+      //   console.dir(encoders);
+      // });
     }
   } catch (e) {
     console.error(e);
