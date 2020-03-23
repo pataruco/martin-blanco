@@ -6,12 +6,13 @@ import { Writable } from 'stream';
 
 import fs from 'fs';
 const source = '/Users/pataruco/Desktop/movies';
+const transcoder = () => ffmpeg();
 
 // const ffmpeg = Ffmpeg();
 
 const getOriginalTime = async (filePath: string): Promise<OriginalTime> => {
   return new Promise(resolve => {
-    ffmpeg()
+    const process = ffmpeg()
       .input(filePath)
       .ffprobe((_, data) => {
         let date: Date;
@@ -38,33 +39,43 @@ const getOriginalTime = async (filePath: string): Promise<OriginalTime> => {
 
 const getTranscodedBuffer = async (filePath: string): Promise<Writable> =>
   new Promise((resolve, reject) => {
-    const stream = new Writable();
-    ffmpeg()
-      .input(filePath)
-      .size('50%')
-      .format('mp4')
-      .writeToStream(stream, { end: true })
+    console.log('process');
+    console.log({ filePath });
+    const stream = fs.createWriteStream('stream');
+
+    ffmpeg(filePath)
+      // const process = ffmpeg(filePath)
       .on('start', () => console.log(`🟢 Start Transcoding ${filePath}`))
       .on('progress', progress =>
-        console.log(`Processing: ${progress.percent} done`),
+        console.log(`🏭 Processing: ${progress.percent}%`),
       )
+      .on('error', error => {
+        console.error(`💥 Error transcoding file ${filePath}.`, error);
+        reject(error);
+      })
       .on('end', () => {
         console.log(' 🏁Transcoding succeeded !');
         resolve(stream);
       })
-      .on('error', () => {
-        return reject(new Error(`Failed to transcode file ${filePath}`));
-      });
+      .size('50%')
+      .format('gif')
+      .output(stream, { end: true })
+      .run();
   });
 
 const start = async () => {
   try {
     const filesPath = await getFilesByPath(source);
 
+    console.log({ filesPath });
+
     for (const file of filesPath) {
       const filePath = getFilePath({ file, source });
       // create path format
+      console.log({ filePath });
       const { year, month, day } = await getOriginalTime(filePath);
+
+      console.log({ year, month, day });
 
       const rotateAndResizeBuffer = await getTranscodedBuffer(filePath);
 
