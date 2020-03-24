@@ -7,6 +7,16 @@ export interface OriginalTime {
   day: number;
 }
 
+export interface Time {
+  year: string;
+  month?: string;
+  day?: string;
+}
+
+export interface UploadFilePath extends OriginalTime {
+  fileExtension?: string;
+}
+
 export const getFilesByPath = async (path: string): Promise<string[]> => {
   try {
     return await fs.readdir(path);
