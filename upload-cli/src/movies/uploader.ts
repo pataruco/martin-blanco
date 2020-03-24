@@ -1,10 +1,9 @@
 import ffmpeg from 'fluent-ffmpeg';
-// var stream = require('stream').Writable;
+// eslint-disable-next-line no-unused-vars
 import { Writable } from 'stream';
-// import path from 'path';
 import dotenv from 'dotenv';
-
 import { Storage } from '@google-cloud/storage';
+
 dotenv.config();
 
 let BUCKET_NAME: string;
@@ -18,8 +17,6 @@ const DELAY_TIME = 100;
 
 const VIDEO_FORMAT = 'webm';
 
-// BUCKET_NAME = BUCKET_NAME_DEV;
-
 import {
   getFilesByPath,
   getFilePath,
@@ -31,7 +28,6 @@ import {
   UploadFilePath,
 } from '../lib/uploader';
 
-import fs from 'fs';
 const source = '/Users/pataruco/Desktop/movies';
 
 export const getDirectory = (query: Time) => {
@@ -108,7 +104,7 @@ const getOriginalTime = async (filePath: string): Promise<OriginalTime> => {
   });
 };
 
-const getremoteWriteStream = async (target: string): Promise<Writable> => {
+const createRemoteStorageFile = async (target: string): Promise<Writable> => {
   const storage = new Storage();
   return storage
     .bucket(`${BUCKET_NAME_DEV}`)
@@ -120,12 +116,8 @@ const getremoteWriteStream = async (target: string): Promise<Writable> => {
     });
 };
 
-const processAndUpload = async (source: string, target: string) => {
-  const stream = await getremoteWriteStream(target);
-
-  // console.log({ stream });
+const processAndUpload = async (source: string, target: Writable) =>
   new Promise((resolve, reject) => {
-    // TODO: Create a file in bucket with createReadStream (https://www.wowza.com/community/questions/48091/ffmpeg-transcode-mp4-from-wowzastreamrecorder-erro.html)
     ffmpeg(source)
       .on('start', () => console.log(`🟢 Start Transcoding ${source}`))
       .on('progress', progress =>
@@ -137,57 +129,29 @@ const processAndUpload = async (source: string, target: string) => {
       })
       .on('end', () => {
         console.log(' 🏁Transcoding succeeded !');
-        resolve(stream);
+        resolve(target);
       })
       .size('50%')
       .format(VIDEO_FORMAT)
       .videoCodec('libvpx')
       .videoBitrate('1000k')
       .audioCodec('libvorbis')
-      .output(stream, { end: true })
-      .run();
-  });
-};
-
-const getTranscodedBuffer = async (filePath: string): Promise<Writable> =>
-  new Promise((resolve, reject) => {
-    // TODO: Create a file in bucket with createReadStream (https://www.wowza.com/community/questions/48091/ffmpeg-transcode-mp4-from-wowzastreamrecorder-erro.html)
-    const stream = fs.createWriteStream('stream.webm');
-
-    ffmpeg(filePath)
-      .on('start', () => console.log(`🟢 Start Transcoding ${filePath}`))
-      .on('progress', progress =>
-        console.log(`🏭 Processing: ${Number(progress.percent).toFixed(2)} %`),
-      )
-      .on('error', error => {
-        console.error(`💥 Error transcoding file ${filePath}.`, error);
-        reject(error);
-      })
-      .on('end', () => {
-        console.log(' 🏁Transcoding succeeded !');
-        resolve(stream);
-      })
-      .size('50%')
-      .format(VIDEO_FORMAT)
-      .videoCodec('libvpx')
-      .videoBitrate('1000k')
-      .audioCodec('libvorbis')
-      .output(stream, { end: true })
+      .output(target, { end: true })
       .run();
   });
 
 const start = async () => {
   try {
+    // get movies
     const filesPath = await getFilesByPath(source);
 
-    console.log({ filesPath });
-
     for (const file of filesPath) {
+      // get file path of a movie
       const filePath = getFilePath({ file, source });
-      // create path format
-      console.log({ filePath });
+      // get  Date when movies was filmed
       const { year, month, day } = await getOriginalTime(filePath);
 
+      // get file path from Google Storage bucket
       const uploadFilePath = await getUploadFilePath({
         year,
         month,
@@ -195,32 +159,10 @@ const start = async () => {
         fileExtension: VIDEO_FORMAT,
       });
 
-      console.log({ uploadFilePath });
-
-      // TODO: Create filepath in bucket
-
-      // TODO: This can process and update
-
-      await processAndUpload(filePath, uploadFilePath);
-      // const rotateAndResizeBuffer = await getTranscodedBuffer(filePath);
-
-      // console.log({ rotateAndResizeBuffer });
-
-      // ffmpeg.getAvailableFormats(function(err, formats) {
-      //   //h264 //mp4
-      //   console.log('Available formats:');
-      //   console.dir(formats);
-      // });
-
-      // ffmpeg.getAvailableCodecs(function(err, codecs) {
-      //   console.log('Available codecs:');
-      //   console.dir(codecs); //h264 //libx264 //libx265
-      // });
-
-      // ffmpeg.getAvailableEncoders(function(err, encoders) {
-      //   console.log('Available encoders:');
-      //   console.dir(encoders);
-      // });
+      // create file on Google Storage bucket
+      const storageFile = await createRemoteStorageFile(uploadFilePath);
+      // Process and upload
+      await processAndUpload(filePath, storageFile);
     }
   } catch (e) {
     console.error(e);
