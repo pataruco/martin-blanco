@@ -7,7 +7,16 @@ import dotenv from 'dotenv';
 import path from 'path';
 import sharp from 'sharp';
 // eslint-disable-next-line no-unused-vars
-import { getFilesByPath, getFilePath, OriginalTime } from '../lib/uploader';
+import {
+  getFilesByPath,
+  getFilePath,
+  // eslint-disable-next-line no-unused-vars
+  OriginalTime,
+  // eslint-disable-next-line no-unused-vars
+  Time,
+  // eslint-disable-next-line no-unused-vars
+  UploadFilePath,
+} from '../lib/uploader';
 
 dotenv.config();
 
@@ -19,22 +28,6 @@ const {
   GOOGLE_CREDENTIALS_PROD,
 } = process.env;
 const DELAY_TIME = 100;
-
-// interface OriginalTime {
-//   year: number;
-//   month: number;
-//   day: number;
-// }
-
-interface UploadFilePath extends OriginalTime {
-  fileExtension: string;
-}
-
-export interface Time {
-  year: string;
-  month?: string;
-  day?: string;
-}
 
 export const getDirectory = (query: Time) => {
   const { year, month, day } = query;

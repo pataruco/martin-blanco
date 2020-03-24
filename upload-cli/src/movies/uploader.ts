@@ -1,11 +1,85 @@
 import ffmpeg from 'fluent-ffmpeg';
-import { getFilesByPath, getFilePath, OriginalTime } from '../lib/uploader';
 // var stream = require('stream').Writable;
 import { Writable } from 'stream';
 // import path from 'path';
+import dotenv from 'dotenv';
+
+import { Storage } from '@google-cloud/storage';
+dotenv.config();
+
+let BUCKET_NAME: string;
+const {
+  BUCKET_NAME_DEV,
+  BUCKET_NAME_PROD,
+  GOOGLE_CREDENTIALS_DEV,
+  GOOGLE_CREDENTIALS_PROD,
+} = process.env;
+const DELAY_TIME = 100;
+
+const VIDEO_FORMAT = 'webm';
+
+// BUCKET_NAME = BUCKET_NAME_DEV;
+
+import {
+  getFilesByPath,
+  getFilePath,
+  // eslint-disable-next-line no-unused-vars
+  OriginalTime,
+  // eslint-disable-next-line no-unused-vars
+  Time,
+  // eslint-disable-next-line no-unused-vars
+  UploadFilePath,
+} from '../lib/uploader';
 
 import fs from 'fs';
 const source = '/Users/pataruco/Desktop/movies';
+
+export const getDirectory = (query: Time) => {
+  const { year, month, day } = query;
+  return day
+    ? `movies/${year}/${month}/${day}`
+    : month
+    ? `movies/${year}/${month}`
+    : `movies/${year}`;
+};
+
+export const getFilesBy = async (query: Time) => {
+  const directory = getDirectory(query);
+  const storage = new Storage();
+  const [allFiles] = await storage.bucket(`${BUCKET_NAME_DEV}`).getFiles({
+    autoPaginate: false,
+    directory,
+  });
+
+  return await Promise.all(
+    allFiles
+      .filter(file => file.name.includes('.'))
+      .map(
+        async file =>
+          `https://storage.googleapis.com/${BUCKET_NAME}/${file.name}`,
+      ),
+  );
+};
+
+const getNumberString = (number: number): string =>
+  number < 10 ? String(`0${number}`) : String(number);
+
+const getUploadFilePath = async (fileTime: UploadFilePath): Promise<string> => {
+  const { year, month, day, fileExtension = VIDEO_FORMAT } = fileTime;
+  const yearString = getNumberString(year);
+  const monthString = getNumberString(month);
+  const dayString = getNumberString(day);
+
+  const files = await getFilesBy({
+    year: yearString,
+    month: monthString,
+    day: dayString,
+  });
+
+  const fileNumber = files.length > 0 ? files.length + 1 : 1;
+
+  return `movies/${yearString}/${monthString}/${dayString}/${fileNumber}.${fileExtension}`;
+};
 
 const getOriginalTime = async (filePath: string): Promise<OriginalTime> => {
   return new Promise(resolve => {
@@ -53,7 +127,7 @@ const getTranscodedBuffer = async (filePath: string): Promise<Writable> =>
         resolve(stream);
       })
       .size('50%')
-      .format('webm')
+      .format(VIDEO_FORMAT)
       .videoCodec('libvpx')
       .videoBitrate('1000k')
       .audioCodec('libvorbis')
@@ -75,10 +149,19 @@ const start = async () => {
 
       console.log({ year, month, day });
 
+      const uploadFilePath = await getUploadFilePath({
+        year,
+        month,
+        day,
+        fileExtension: VIDEO_FORMAT,
+      });
+
+      console.log({ uploadFilePath });
+
       // TODO: Create filepath in bucket
 
       // TODO: This can process and update
-      const rotateAndResizeBuffer = await getTranscodedBuffer(filePath);
+      // const rotateAndResizeBuffer = await getTranscodedBuffer(filePath);
 
       // console.log({ rotateAndResizeBuffer });
 
