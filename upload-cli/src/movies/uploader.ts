@@ -108,6 +108,45 @@ const getOriginalTime = async (filePath: string): Promise<OriginalTime> => {
   });
 };
 
+const getremoteWriteStream = async (target: string): Promise<Writable> => {
+  const storage = new Storage();
+  return storage
+    .bucket(`${BUCKET_NAME}`)
+    .file(target)
+    .createWriteStream({
+      metadata: {
+        contentType: `video/${VIDEO_FORMAT}`,
+      },
+    });
+};
+
+const processAndUpload = async (source: string, target: string) => {
+  const stream = await getremoteWriteStream(target);
+  new Promise((resolve, reject) => {
+    // TODO: Create a file in bucket with createReadStream (https://www.wowza.com/community/questions/48091/ffmpeg-transcode-mp4-from-wowzastreamrecorder-erro.html)
+    ffmpeg(filePath)
+      .on('start', () => console.log(`🟢 Start Transcoding ${filePath}`))
+      .on('progress', progress =>
+        console.log(`🏭 Processing: ${Number(progress.percent).toFixed(2)} %`),
+      )
+      .on('error', error => {
+        console.error(`💥 Error transcoding file ${filePath}.`, error);
+        reject(error);
+      })
+      .on('end', () => {
+        console.log(' 🏁Transcoding succeeded !');
+        resolve(stream);
+      })
+      .size('50%')
+      .format(VIDEO_FORMAT)
+      .videoCodec('libvpx')
+      .videoBitrate('1000k')
+      .audioCodec('libvorbis')
+      .output(stream, { end: true })
+      .run();
+  });
+};
+
 const getTranscodedBuffer = async (filePath: string): Promise<Writable> =>
   new Promise((resolve, reject) => {
     // TODO: Create a file in bucket with createReadStream (https://www.wowza.com/community/questions/48091/ffmpeg-transcode-mp4-from-wowzastreamrecorder-erro.html)
@@ -147,8 +186,6 @@ const start = async () => {
       console.log({ filePath });
       const { year, month, day } = await getOriginalTime(filePath);
 
-      console.log({ year, month, day });
-
       const uploadFilePath = await getUploadFilePath({
         year,
         month,
@@ -161,7 +198,9 @@ const start = async () => {
       // TODO: Create filepath in bucket
 
       // TODO: This can process and update
-      // const rotateAndResizeBuffer = await getTranscodedBuffer(filePath);
+
+      await processAndUpload(filePath, uploadFilePath);
+      const rotateAndResizeBuffer = await getTranscodedBuffer(filePath);
 
       // console.log({ rotateAndResizeBuffer });
 
