@@ -56,7 +56,7 @@ export const getFilesBy = async (query: Time) => {
       .filter(file => file.name.includes('.'))
       .map(
         async file =>
-          `https://storage.googleapis.com/${BUCKET_NAME}/${file.name}`,
+          `https://storage.googleapis.com/${BUCKET_NAME_DEV}/${file.name}`,
       ),
   );
 };
@@ -111,7 +111,7 @@ const getOriginalTime = async (filePath: string): Promise<OriginalTime> => {
 const getremoteWriteStream = async (target: string): Promise<Writable> => {
   const storage = new Storage();
   return storage
-    .bucket(`${BUCKET_NAME}`)
+    .bucket(`${BUCKET_NAME_DEV}`)
     .file(target)
     .createWriteStream({
       metadata: {
@@ -122,15 +122,17 @@ const getremoteWriteStream = async (target: string): Promise<Writable> => {
 
 const processAndUpload = async (source: string, target: string) => {
   const stream = await getremoteWriteStream(target);
+
+  // console.log({ stream });
   new Promise((resolve, reject) => {
     // TODO: Create a file in bucket with createReadStream (https://www.wowza.com/community/questions/48091/ffmpeg-transcode-mp4-from-wowzastreamrecorder-erro.html)
-    ffmpeg(filePath)
-      .on('start', () => console.log(`🟢 Start Transcoding ${filePath}`))
+    ffmpeg(source)
+      .on('start', () => console.log(`🟢 Start Transcoding ${source}`))
       .on('progress', progress =>
         console.log(`🏭 Processing: ${Number(progress.percent).toFixed(2)} %`),
       )
       .on('error', error => {
-        console.error(`💥 Error transcoding file ${filePath}.`, error);
+        console.error(`💥 Error transcoding file ${source}.`, error);
         reject(error);
       })
       .on('end', () => {
@@ -200,7 +202,7 @@ const start = async () => {
       // TODO: This can process and update
 
       await processAndUpload(filePath, uploadFilePath);
-      const rotateAndResizeBuffer = await getTranscodedBuffer(filePath);
+      // const rotateAndResizeBuffer = await getTranscodedBuffer(filePath);
 
       // console.log({ rotateAndResizeBuffer });
 
