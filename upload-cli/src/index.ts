@@ -1,5 +1,6 @@
 import inquirer from 'inquirer';
-import uploader from './uploader';
+import pictureUploader from './pictures/uploader';
+import movieUploader from './movies/uploader';
 import chalk from 'chalk';
 
 export const log = console.log;
@@ -12,9 +13,17 @@ const start = async () => {
   log(chalk`{bold Martin Blanco API images uploader} 🚀`);
   const prompt = await inquirer.prompt([
     {
+      type: 'list',
+      name: 'typeOfFiles',
+      message: 'What type of files you want to process?:',
+      choices: ['pictures', 'movies'],
+      filter: val => val.toLowerCase(),
+    },
+    {
       type: 'string',
       name: 'source',
-      message: 'Source directory as an absolute path, e.g.: ~/Desktop/upload:',
+      message:
+        'Source directory as an absolute path, e.g.: /Users/pataruco/Desktop/upload:',
       validate: sourceValidation,
       filter: val => val.trim(),
     },
@@ -26,8 +35,16 @@ const start = async () => {
       filter: val => val.toLowerCase(),
     },
   ]);
-  const { source, target } = prompt;
-  await uploader({ source, target });
+  const { source, target, typeOfFiles } = prompt;
+  switch (typeOfFiles) {
+    case value:
+      break;
+
+    default:
+      break;
+  }
+
+  await pictureUploader({ source, target });
 };
 
 if (!module.parent) {
