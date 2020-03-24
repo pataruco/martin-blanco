@@ -140,7 +140,7 @@ const processAndUpload = async (source: string, target: Writable) =>
       .run();
   });
 
-const start = async () => {
+const main = async () => {
   try {
     // get movies
     const filesPath = await getFilesByPath(source);
@@ -170,6 +170,8 @@ const start = async () => {
   }
 };
 
-if (!module.parent) {
-  start().then();
-}
+// if (!module.parent) {
+//   start().then();
+// }
+
+export default main;

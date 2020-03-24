@@ -3,8 +3,7 @@
   "version": "1.0.0",
   "license": "MIT",
   "scripts": {
-    "upload:pictures": "yarn ts-node ./src/pictures/index.ts",
-    "upload:movies": "yarn ts-node ./src/movies/uploader.ts"
+    "upload": "yarn ts-node ./src/index.ts"
   },
   "dependencies": {
     "@google-cloud/storage": "^4.5.0",
