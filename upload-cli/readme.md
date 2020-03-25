@@ -12,19 +12,25 @@ for them to be serve using the [API](../api)
 
 ## Installation
 
-1. Get into the `upload-cli` directory
+1. Install **ffmpeg**
+
+   ```sh
+   brew install ffmpeg
+   ```
+
+2. Get into the `upload-cli` directory
 
    ```sh
    cd upload-cli
    ```
 
-2. Install dependencies
+3. Install dependencies
 
    ```sh
    yarn
    ```
 
-3. Create an `.env` file and set values from `.env.example`
+4. Create an `.env` file and set values from `.env.example`
 
    ```sh
    touch .env
@@ -41,7 +47,7 @@ yarn upload
 
 Follow the instructions on prompt:
 
-1. Type source directory as an absolute path, e.g.: `~/Desktop/upload`
+1. Type source directory as an absolute path, e.g.: `Users/<username>/Desktop/upload`
 
 2. Target an environment:
 
@@ -54,9 +60,3 @@ Follow the instructions on prompt:
 ## Tests
 
 TODO 🧪🏗
-
-## Movies
-
-```sh
-brew install ffmpeg
-```
