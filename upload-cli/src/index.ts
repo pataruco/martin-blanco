@@ -23,7 +23,7 @@ const start = async () => {
       type: 'string',
       name: 'source',
       message:
-        'Source directory as an absolute path, e.g.: /Users/pataruco/Desktop/upload:',
+        'Source directory as an absolute path, e.g.: /Users/pataruco/Desktop/pictures:',
       validate: sourceValidation,
       filter: val => val.trim(),
     },
