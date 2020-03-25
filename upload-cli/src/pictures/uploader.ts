@@ -6,19 +6,13 @@ import chalk from 'chalk';
 import dotenv from 'dotenv';
 import path from 'path';
 import sharp from 'sharp';
-// eslint-disable-next-line no-unused-vars
 import {
   getFilesByPath,
   getFilePath,
-  // eslint-disable-next-line no-unused-vars
   OriginalTime,
-  // eslint-disable-next-line no-unused-vars
   Time,
-  // eslint-disable-next-line no-unused-vars
   UploadFilePath,
-  // eslint-disable-next-line no-unused-vars
   UploaderIO,
-  // setEnvironment,
   delay,
   DELAY_TIME,
 } from '../lib/uploader';

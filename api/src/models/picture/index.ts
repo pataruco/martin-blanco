@@ -1,4 +1,3 @@
-// eslint-disable-next-line no-unused-vars
 import { Storage, File } from '@google-cloud/storage';
 import dotenv from 'dotenv';
 
