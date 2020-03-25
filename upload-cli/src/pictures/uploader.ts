@@ -1,5 +1,5 @@
 import { ExifParserFactory } from 'ts-exif-parser';
-import { log } from './index';
+import { log } from '../index';
 import { promises as fs } from 'fs';
 import { Storage } from '@google-cloud/storage';
 import chalk from 'chalk';
@@ -16,18 +16,16 @@ import {
   Time,
   // eslint-disable-next-line no-unused-vars
   UploadFilePath,
+  // eslint-disable-next-line no-unused-vars
+  UploaderIO,
+  setEnvironment,
+  delay,
+  DELAY_TIME,
 } from '../lib/uploader';
 
 dotenv.config();
 
 let BUCKET_NAME: string;
-const {
-  BUCKET_NAME_DEV,
-  BUCKET_NAME_PROD,
-  GOOGLE_CREDENTIALS_DEV,
-  GOOGLE_CREDENTIALS_PROD,
-} = process.env;
-const DELAY_TIME = 100;
 
 export const getDirectory = (query: Time) => {
   const { year, month, day } = query;
@@ -105,9 +103,6 @@ const getUploadFilePath = async (fileTime: UploadFilePath): Promise<string> => {
   return `pictures/${yearString}/${monthString}/${dayString}/${fileNumber}${fileExtension}`;
 };
 
-const delay = (ms: number): Promise<NodeJS.Timeout> =>
-  new Promise(resolve => setTimeout(resolve, ms));
-
 const uploadFile = async ({
   fileName,
   buffer,
@@ -127,30 +122,25 @@ const uploadFile = async ({
   }
 };
 
-interface UploaderIO {
-  source: string;
-  target: 'development' | 'production';
-}
+// const setEnvironment = async (target: UploaderIO['target']): Promise<void> =>
+//   new Promise(resolve => {
+//     if (target === 'development') {
+//       BUCKET_NAME = BUCKET_NAME_DEV ?? '';
+//       process.env = {
+//         ...process.env,
+//         GOOGLE_APPLICATION_CREDENTIALS: GOOGLE_CREDENTIALS_DEV,
+//       };
+//     }
 
-const setEnvironment = async (target: UploaderIO['target']): Promise<void> =>
-  new Promise(resolve => {
-    if (target === 'development') {
-      BUCKET_NAME = BUCKET_NAME_DEV ?? '';
-      process.env = {
-        ...process.env,
-        GOOGLE_APPLICATION_CREDENTIALS: GOOGLE_CREDENTIALS_DEV,
-      };
-    }
-
-    if (target === 'production') {
-      BUCKET_NAME = BUCKET_NAME_PROD ?? '';
-      process.env = {
-        ...process.env,
-        GOOGLE_APPLICATION_CREDENTIALS: GOOGLE_CREDENTIALS_PROD,
-      };
-    }
-    resolve();
-  });
+//     if (target === 'production') {
+//       BUCKET_NAME = BUCKET_NAME_PROD ?? '';
+//       process.env = {
+//         ...process.env,
+//         GOOGLE_APPLICATION_CREDENTIALS: GOOGLE_CREDENTIALS_PROD,
+//       };
+//     }
+//     resolve();
+//   });
 
 const main = async ({ source, target }: UploaderIO): Promise<void> => {
   await setEnvironment(target);

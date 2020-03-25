@@ -3,17 +3,10 @@ import ffmpeg from 'fluent-ffmpeg';
 import { Writable } from 'stream';
 import dotenv from 'dotenv';
 import { Storage } from '@google-cloud/storage';
+import chalk from 'chalk';
+import { log } from '../index';
 
 dotenv.config();
-
-let BUCKET_NAME: string;
-const {
-  BUCKET_NAME_DEV,
-  BUCKET_NAME_PROD,
-  GOOGLE_CREDENTIALS_DEV,
-  GOOGLE_CREDENTIALS_PROD,
-} = process.env;
-const DELAY_TIME = 100;
 
 const VIDEO_FORMAT = 'webm';
 
@@ -26,9 +19,13 @@ import {
   Time,
   // eslint-disable-next-line no-unused-vars
   UploadFilePath,
+  // eslint-disable-next-line no-unused-vars
+  UploaderIO,
+  BUCKET_NAME,
+  setEnvironment,
+  delay,
+  DELAY_TIME,
 } from '../lib/uploader';
-
-const source = '/Users/pataruco/Desktop/movies';
 
 export const getDirectory = (query: Time) => {
   const { year, month, day } = query;
@@ -42,7 +39,7 @@ export const getDirectory = (query: Time) => {
 export const getFilesBy = async (query: Time) => {
   const directory = getDirectory(query);
   const storage = new Storage();
-  const [allFiles] = await storage.bucket(`${BUCKET_NAME_DEV}`).getFiles({
+  const [allFiles] = await storage.bucket(`${BUCKET_NAME}`).getFiles({
     autoPaginate: false,
     directory,
   });
@@ -52,7 +49,7 @@ export const getFilesBy = async (query: Time) => {
       .filter(file => file.name.includes('.'))
       .map(
         async file =>
-          `https://storage.googleapis.com/${BUCKET_NAME_DEV}/${file.name}`,
+          `https://storage.googleapis.com/${BUCKET_NAME}/${file.name}`,
       ),
   );
 };
@@ -107,7 +104,7 @@ const getOriginalTime = async (filePath: string): Promise<OriginalTime> => {
 const createRemoteStorageFile = async (target: string): Promise<Writable> => {
   const storage = new Storage();
   return storage
-    .bucket(`${BUCKET_NAME_DEV}`)
+    .bucket(`${BUCKET_NAME}`)
     .file(target)
     .createWriteStream({
       metadata: {
@@ -116,7 +113,7 @@ const createRemoteStorageFile = async (target: string): Promise<Writable> => {
     });
 };
 
-const processAndUpload = async (source: string, target: Writable) =>
+const processAndUpload = async (source: string, storageFile: Writable) =>
   new Promise((resolve, reject) => {
     ffmpeg(source)
       .on('start', () => console.log(`🟢 Start Transcoding ${source}`))
@@ -129,25 +126,33 @@ const processAndUpload = async (source: string, target: Writable) =>
       })
       .on('end', () => {
         console.log(' 🏁Transcoding succeeded !');
-        resolve(target);
+        resolve(storageFile);
       })
       .size('50%')
       .format(VIDEO_FORMAT)
       .videoCodec('libvpx')
       .videoBitrate('1000k')
       .audioCodec('libvorbis')
-      .output(target, { end: true })
+      .output(storageFile, { end: true })
       .run();
   });
 
-const main = async () => {
+const main = async ({ source, target }: UploaderIO): Promise<void> => {
+  await setEnvironment(target);
   try {
+    log(chalk`Get files from: {green ${source}}`);
     // get movies
     const filesPath = await getFilesByPath(source);
+    const total = filesPath.length;
+    let counter = 1;
 
     for (const file of filesPath) {
+      log(chalk`{inverse ${counter} of ${total}}`);
+
       // get file path of a movie
       const filePath = getFilePath({ file, source });
+      log(chalk`Get file from: {yellow ${filePath}}`);
+
       // get  Date when movies was filmed
       const { year, month, day } = await getOriginalTime(filePath);
 
@@ -161,17 +166,24 @@ const main = async () => {
 
       // create file on Google Storage bucket
       const storageFile = await createRemoteStorageFile(uploadFilePath);
+
       // Process and upload
+      log(chalk`{bgYellow {black Delaying for ${DELAY_TIME}ms}}`);
+      await delay(DELAY_TIME);
+
+      log(chalk`Processing movie: {blue ${filePath}} 🎥`);
       await processAndUpload(filePath, storageFile);
+
+      log(
+        chalk`{bold File ${uploadFilePath} uploaded to ${uploadFilePath}} 💥`,
+      );
+
+      counter++;
     }
   } catch (e) {
     console.error(e);
     throw Error(`Error processing upload. ${e}`);
   }
 };
-
-// if (!module.parent) {
-//   start().then();
-// }
 
 export default main;

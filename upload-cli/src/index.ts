@@ -36,15 +36,18 @@ const start = async () => {
     },
   ]);
   const { source, target, typeOfFiles } = prompt;
-  switch (typeOfFiles) {
-    case value:
-      break;
 
+  switch (typeOfFiles) {
+    case 'movies':
+      await movieUploader({ source, target });
+      break;
+    case 'pictures':
+      await pictureUploader({ source, target });
+      break;
     default:
+      await pictureUploader({ source, target });
       break;
   }
-
-  await pictureUploader({ source, target });
 };
 
 if (!module.parent) {
