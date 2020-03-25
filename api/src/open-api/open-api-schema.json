@@ -256,6 +256,238 @@
           }
         }
       }
+    },
+    "/movies/date/{year}": {
+      "get": {
+        "tags": ["Movies 🎥"],
+        "description": "Year",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/year"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns all movies by year",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/YearPayload"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Files not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FilesNotFound"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error, Server give up 💥",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error500"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/movies/date/{year}/{month}": {
+      "get": {
+        "tags": ["Movies 🎥"],
+        "description": "Year/Month",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/year"
+          },
+          {
+            "$ref": "#/components/parameters/month"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns all movies by year and month",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MonthPayload"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Files not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FilesNotFound"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error, Server give up 💥",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error500"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/movies/date/{year}/{month}/{day}": {
+      "get": {
+        "tags": ["Movies 🎥"],
+        "description": "Year/Month/Day",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/year"
+          },
+          {
+            "$ref": "#/components/parameters/month"
+          },
+          {
+            "$ref": "#/components/parameters/day"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns all movies by year and month and day",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DayPayload"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Files not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FilesNotFound"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error, Server give up 💥",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error500"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/movies/date/{year}/{month}/{day}/{id}": {
+      "get": {
+        "tags": ["Movies 🎥"],
+        "description": "Year/Month/Day",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/year"
+          },
+          {
+            "$ref": "#/components/parameters/month"
+          },
+          {
+            "$ref": "#/components/parameters/day"
+          },
+          {
+            "$ref": "#/components/parameters/id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Year/Month/Day/ID",
+            "content": {
+              "video/webm": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary",
+                  "description": "A video"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Files not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FilesNotFound"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error, Server give up 💥",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error500"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/movies/random": {
+      "get": {
+        "tags": ["Movies 🎥"],
+        "description": "Random",
+        "responses": {
+          "200": {
+            "description": "Random movie",
+            "content": {
+              "video/webm": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary",
+                  "description": "An image"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Files not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FilesNotFound"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error, Server give up 💥",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error500"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "servers": [
@@ -374,7 +606,7 @@
       "File": {
         "type": "string",
         "description": "## An URL of a file",
-        "example": "https://storage.googleapis.com/martin-blanco/pictures/2017/01/25/2.jpeg"
+        "example": "https://storage.googleapis.com/martin-blanco/<movies | pictures>/2017/01/25/2.jpeg"
       },
       "ErrorMessage": {
         "type": "object",

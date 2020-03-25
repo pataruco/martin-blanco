@@ -31,7 +31,7 @@
   "scripts": {
     "dev": "yarn nodemon ./src/index.ts",
     "importer": "yarn ts-node ./src/importer/index.ts",
-    "open-api": "open https://documenter.getpostman.com/view/61112/SzRw3X7n?version=latest",
+    "open-api": "open https://documenter.getpostman.com/view/61112/SzYUY17n?version=latest",
     "start": "node ./src/index.js",
     "test": "yarn jest --detectOpenHandles"
   },
