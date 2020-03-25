@@ -3,12 +3,6 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-interface OriginalTime {
-  year: number;
-  month: number;
-  day: number;
-}
-
 export interface Time {
   year: string;
   month?: string;
@@ -18,10 +12,10 @@ export interface Time {
 export const getDirectory = (query: Time) => {
   const { year, month, day } = query;
   return day
-    ? `pictures/${year}/${month}/${day}`
+    ? `movies/${year}/${month}/${day}`
     : month
-    ? `pictures/${year}/${month}`
-    : `pictures/${year}`;
+    ? `movies/${year}/${month}`
+    : `movies/${year}`;
 };
 
 export const getFilesBy = async (query: Time) => {
@@ -60,7 +54,7 @@ export const getFileById = async (
 
     const [filename] = filesbyDate.filter(fileByDate =>
       fileByDate.includes(
-        `https://storage.googleapis.com/${BUCKET_NAME}/pictures/${year}/${month}/${day}/${id}`,
+        `https://storage.googleapis.com/${BUCKET_NAME}/movies/${year}/${month}/${day}/${id}`,
       ),
     );
 
@@ -81,7 +75,7 @@ export const getRandomFile = async (): Promise<File> => {
   });
 
   const allPictures = allFiles.filter(
-    file => file.name.includes('.') && file.name.includes('pictures'),
+    file => file.name.includes('.') && file.name.includes('movies'),
   );
   const randomIndex = getRandomIndex(allPictures.length);
   return allPictures[randomIndex];
