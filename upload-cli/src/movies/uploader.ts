@@ -1,5 +1,4 @@
 import ffmpeg from 'fluent-ffmpeg';
-// eslint-disable-next-line no-unused-vars
 import { Writable } from 'stream';
 import dotenv from 'dotenv';
 import { Storage } from '@google-cloud/storage';
@@ -13,13 +12,9 @@ const VIDEO_FORMAT = 'webm';
 import {
   getFilesByPath,
   getFilePath,
-  // eslint-disable-next-line no-unused-vars
   OriginalTime,
-  // eslint-disable-next-line no-unused-vars
   Time,
-  // eslint-disable-next-line no-unused-vars
   UploadFilePath,
-  // eslint-disable-next-line no-unused-vars
   UploaderIO,
   delay,
   DELAY_TIME,

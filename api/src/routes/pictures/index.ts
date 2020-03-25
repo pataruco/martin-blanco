@@ -1,4 +1,3 @@
-// eslint-disable-next-line no-unused-vars
 import express, { Request, Response } from 'express';
 import Joi from '@hapi/joi';
 import { getFileById, getRandomFile, getFilesBy } from '../../models/picture';
