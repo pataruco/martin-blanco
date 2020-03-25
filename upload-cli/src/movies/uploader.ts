@@ -21,11 +21,48 @@ import {
   UploadFilePath,
   // eslint-disable-next-line no-unused-vars
   UploaderIO,
-  BUCKET_NAME,
-  setEnvironment,
   delay,
   DELAY_TIME,
 } from '../lib/uploader';
+
+const {
+  BUCKET_NAME_DEV,
+  BUCKET_NAME_PROD,
+  GOOGLE_CREDENTIALS_DEV,
+  GOOGLE_CREDENTIALS_PROD,
+} = process.env;
+
+dotenv.config();
+
+let BUCKET_NAME: string;
+
+const VIDEO_SIZE = '50%';
+const VIDEO_CODEC = 'libvpx';
+const VIDEO_BITRATE = '1000k';
+
+const AUDIO_CODEC = 'libvorbis';
+
+export const setEnvironment = async (
+  target: UploaderIO['target'],
+): Promise<void> =>
+  new Promise(resolve => {
+    if (target === 'development') {
+      BUCKET_NAME = BUCKET_NAME_DEV ?? '';
+      process.env = {
+        ...process.env,
+        GOOGLE_APPLICATION_CREDENTIALS: GOOGLE_CREDENTIALS_DEV,
+      };
+    }
+
+    if (target === 'production') {
+      BUCKET_NAME = BUCKET_NAME_PROD ?? '';
+      process.env = {
+        ...process.env,
+        GOOGLE_APPLICATION_CREDENTIALS: GOOGLE_CREDENTIALS_PROD,
+      };
+    }
+    resolve();
+  });
 
 export const getDirectory = (query: Time) => {
   const { year, month, day } = query;
@@ -128,11 +165,11 @@ const processAndUpload = async (source: string, storageFile: Writable) =>
         console.log(' 🏁Transcoding succeeded !');
         resolve(storageFile);
       })
-      .size('50%')
+      .size(VIDEO_SIZE)
       .format(VIDEO_FORMAT)
-      .videoCodec('libvpx')
-      .videoBitrate('1000k')
-      .audioCodec('libvorbis')
+      .videoCodec(VIDEO_CODEC)
+      .videoBitrate(VIDEO_BITRATE)
+      .audioCodec(AUDIO_CODEC)
       .output(storageFile, { end: true })
       .run();
   });

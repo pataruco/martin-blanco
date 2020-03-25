@@ -18,10 +18,17 @@ import {
   UploadFilePath,
   // eslint-disable-next-line no-unused-vars
   UploaderIO,
-  setEnvironment,
+  // setEnvironment,
   delay,
   DELAY_TIME,
 } from '../lib/uploader';
+
+const {
+  BUCKET_NAME_DEV,
+  BUCKET_NAME_PROD,
+  GOOGLE_CREDENTIALS_DEV,
+  GOOGLE_CREDENTIALS_PROD,
+} = process.env;
 
 dotenv.config();
 
@@ -122,25 +129,26 @@ const uploadFile = async ({
   }
 };
 
-// const setEnvironment = async (target: UploaderIO['target']): Promise<void> =>
-//   new Promise(resolve => {
-//     if (target === 'development') {
-//       BUCKET_NAME = BUCKET_NAME_DEV ?? '';
-//       process.env = {
-//         ...process.env,
-//         GOOGLE_APPLICATION_CREDENTIALS: GOOGLE_CREDENTIALS_DEV,
-//       };
-//     }
+const setEnvironment = async (target: UploaderIO['target']): Promise<void> =>
+  new Promise(resolve => {
+    if (target === 'development') {
+      BUCKET_NAME = BUCKET_NAME_DEV ?? '';
+      process.env = {
+        ...process.env,
+        GOOGLE_APPLICATION_CREDENTIALS: GOOGLE_CREDENTIALS_DEV,
+      };
+    }
 
-//     if (target === 'production') {
-//       BUCKET_NAME = BUCKET_NAME_PROD ?? '';
-//       process.env = {
-//         ...process.env,
-//         GOOGLE_APPLICATION_CREDENTIALS: GOOGLE_CREDENTIALS_PROD,
-//       };
-//     }
-//     resolve();
-//   });
+    if (target === 'production') {
+      BUCKET_NAME = BUCKET_NAME_PROD ?? '';
+      process.env = {
+        ...process.env,
+        GOOGLE_APPLICATION_CREDENTIALS: GOOGLE_CREDENTIALS_PROD,
+      };
+    }
+
+    resolve();
+  });
 
 const main = async ({ source, target }: UploaderIO): Promise<void> => {
   await setEnvironment(target);
