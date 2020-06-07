@@ -1,20 +1,19 @@
-name: CI Prod
+name: CI Dev
 
 on:
   push:
-    tags:
-      - 'R*'
+    branches:
+      - 'master'
     paths:
-      - 'api/*'
-      - '!infrastructure/*'
-      - '!upload-cli/*'
+      - 'api/**'
+      - .github/workflows/api-development.yaml
 
 # Environment variables available to all jobs and steps in this workflow
 env:
-  PROJECT_ID: martin-blanco-api-prod
+  PROJECT_ID: martin-blanco-api-dev
   RUN_REGION: europe-west1
   SERVICE_NAME: martin-blanco-api
-  BUCKET_NAME: martin-blanco-api
+  BUCKET_NAME: martin-blanco
 
 jobs:
   setup-build-deploy:
@@ -28,8 +27,8 @@ jobs:
       # Setup gcloud CLI
       - uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
         with:
-          service_account_email: ${{ secrets.GCP_SA_EMAIL_PROD }}
-          service_account_key: ${{ secrets.GCP_SA_KEY_PROD}}
+          service_account_email: ${{ secrets.GCP_SA_EMAIL }}
+          service_account_key: ${{ secrets.GCP_SA_KEY}}
 
       # Configure gcloud CLI
       - name: gcloud Set up
