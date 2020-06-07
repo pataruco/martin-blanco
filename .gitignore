@@ -11,3 +11,5 @@ api/src/importer/output/*
 !api/src/importer/output/.gitkeep
 
 dist
+
+.next

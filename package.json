@@ -35,6 +35,7 @@
   "version": "1.0.0",
   "workspaces": [
     "api",
-    "upload-cli"
+    "upload-cli",
+    "web"
   ]
 }

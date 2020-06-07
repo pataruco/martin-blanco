@@ -1,0 +1,21 @@
+{
+  "author": "Pedro Martin",
+  "dependencies": {
+    "next": "^9.4.4",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1"
+  },
+  "description": "Web UI",
+  "devDependencies": {
+    "@types/react": "^16.9.35",
+    "typescript": "^3.9.5"
+  },
+  "license": "MIT",
+  "name": "web",
+  "scripts": {
+    "dev": "next",
+    "build": "next build",
+    "start": "next start"
+  },
+  "version": "1.0.0"
+}
